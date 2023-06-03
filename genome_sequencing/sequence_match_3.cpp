@@ -6,58 +6,54 @@
 
 using namespace std;
 
-/* tests ok */
-void     slide(string s1, string s2)
+/* matching 3'-end of s1 to 5'end of s2 */
+string     findSeq(string s1, string s2)
 {
-    string::iterator        it1 = s1.begin();
-    string::iterator        it2 = s2.begin();
-
-    int i, best;
-    string sub1;
-    for (i = 0; i < s1.length(); ++i){
-        sub1 = s1.copy()
-    }
-    string sub1;
-    while (   )
+    int     i = 0;
+    string  sub = s1;
+    bool    match_to_s2_5prime = false;
+    while (sub.length())
     {
-        sub1 = s1.copy(i, it1.end());
+        size_t  found = s2.find(sub);
+        if (found!= string::npos)
+        {
+            cout << sub << " " << found << endl;
+            if (!match_to_s2_5prime)
+                return s2;
+            else if (sub[0] == s2[0])
+            {
+                string only_s1 = s1.substr(0, i);
+                cout << "s1 = " << only_s1 <<  " + " << sub << endl;
+                only_s1 += s2;
+                return (only_s1);
+            }
+        }
+        match_to_s2_5prime = true;
+        sub.erase(0, 1);
+        i++;
     }
-    for (it2 = s2.begin() ; it2 < s2.end(); ++it2)
-        if (*it2 == *(s1.end() - 1) )
-            break;
-
-
-    for (it2r = s2.end() - 1 ; it2r < s2.begin(); ++it2r)
-        if (*it2r == *(s1.end() - 1) )
-            break;
-
-    //int index = it2 - s2.begin();
-    string::iterator    it2p = s2.begin();
-    string::iterator    it1 = (s1.end() - 1) - (it2 - s2.begin());
-    int    match = 0;
-    
-    while( *it1 == *it2p && it1 < s1.end())
-    {
-        match += 1;
-        it1++;
-        it2p++;
-    }
-    cerr << "match " << match << "  ";
-    int new_size = s1.size() + s2.size() - match;
-    cout << "final_size " << new_size << endl;
+    return (s1 + s2);
 }
 
+
+void     slide(string s1, string s2)
+{
+    cout << endl <<  s1 <<  "   " << s2 << endl;
+    string res = findSeq(s1, s2);
+    cout << res <<  " len= " << res.length() << endl;
+    cout << " --------------------------------";
+}
 int         main()
 {
-    cout << "sequence slider :" << endl;
+    cout << "sequence match :" << endl;
+    slide("AACCC", "GAACTT");       // match=0  len=11
+    slide("AACG", "CCTTAACG");    // match=4  len=8
     slide("AAC", "CCTT");         // match=1  len=6
     slide("AACAG", "CAGCTT");     // match=3  len=8
     slide("AAC", "GACTT");        // match=0  len=8
-    slide("AAC", "GAACTT");       // match=0  len=9
     slide("ATGAGA", "GAGAC");     // match=4  len=7 //
-    slide("AAC", "CCTTAAC");      // match=1  len=9
+    slide("AAC", "CCTTAAC");      // match=1  len=7
     slide("CCTTAAC", "AAC");      // match=3  len=7
-    slide("C", "C");              // match=1  len=1
-    slide("C", "A");              // match=0  len=2
+    slide("TGCGA", "GCGATATTAAGCGATAGATA");      // match=3  len=7
     return 0;
 }
