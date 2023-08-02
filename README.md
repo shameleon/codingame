@@ -2,10 +2,9 @@
 codinggame.com
 
 ## SOLO PUZZLEs
-### easy
+### easy (all 100% score)
 
-### 
-all 100% score
+#### Conditions, loops
 | puzzle | language(s) | skills |
 | ----------- | -------- | ---------------------- |
 | Onboarding | Javascript | Conditions |
@@ -13,7 +12,7 @@ all 100% score
 | MArs lander - ep.1| C, C++ | Conditions |
 | Ghost Legs  |  C |  Conditions loops |
 | Temperatures | C++ | loops array |
-|the descent | C++ | loops |
+| the descent | C++ | loops |
 | Prefix code  | C  |  Tries String|
 | [Rock Paper Scissors](https://www.codingame.com/training/easy/rock-paper-scissors-lizard-spock) | C | Conditions Arrays |
 | horse_power | C++ | Boucles |
@@ -33,23 +32,20 @@ all 100% score
 | puzzle | language(s) | skills |
 | ----------- | -------- | ---------------------- |
 | Credit Card Verifier (Luhn’s algorithm) | C | Check-digit|
+| Detective Geek | C | BouclesTableauxCryptologiestring |
 | Retro Typewriter Art | C++ | Parsing |
-| Detective Geek | C++ | BouclesTableauxCryptologiestring |
 | Encryption/Decryption of Enigma Machine | C++ | EncodageChaînes de caractèresCryptologieString manipulation |
 | Unary | C++ | ConditionsBoucles Encodage strings |
 
 
 
 ### medium
-  [the gift](https://www.codingame.com/training/medium/the-gift)
-      C++ 88%
-  [what the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck)
-      C++ 100%
-  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence)
-      C++ 100%
+| puzzle | language(s) | score | skills |
+| ----------- | -------- | ---- | ---------------------- |
+|  [the gift](https://www.codingame.com/training/medium/the-gift) | C++ | 88% | Algorithmes glouton |
+|  [what the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | 100% | |
+|  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | 100% | |
 
 ### hard
-  [genome sequencing](https://www.codingame.com/training/hard/genome-sequencing)
-      C++ 100%
-  [surface](https://www.codingame.com/training/hard/surface)
-      C++ 60%
+  | [genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | 100% | |
+  | [surface](https://www.codingame.com/training/hard/surface) | C++ | 60% | |
