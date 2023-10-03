@@ -1,0 +1,56 @@
+
+Dans le centre de calcul Computer2000 c'est vous qui planifiez l'utilisation d'un super calculateur pour des scientifiques. Le problème avec les scientifiques c'est qu'ils souhaitent tous lancer des calculs sur le super calculateur quand bon leur semble et que, évidemment, vous ne pouvez pas toujours satisfaire tout le monde.
+
+​Vous avez donc décidé de mettre un peu d'ordre en planifiant les tâches des uns et des autres. La logique est simple : plus le nombre de calculs pouvant être effectués est élevé, plus vous pourrez satisfaire du monde.
+  Règles
+Les scientifiques vous fournissent le jour de début de leur calcul et le nombre de journées consécutives de location dont ils ont besoin.
+
+Par exemple :
+Calcul 	Jour début 	Durée
+A 	2 	5
+B 	9 	7
+C 	15 	6
+D 	9 	3
+
+Le calcul A commence au jour 2 et termine au jour 6
+
+Le calcul B commence au jour 9 et termine au jour 15
+
+Le calcul C commence au jour 15 et termine au jour 20
+
+Le calcul D commence au jour 9 et termine au jour 11
+Dans cet exemple il n'est pas possible de réaliser tous les calculs parce que les périodes de B et C se chevauchent. 3 calculs au maximum pourront être effectués : A, D et C.
+  Entrées du jeu
+Entrée
+
+Ligne 1 : le nombre N de calculs
+
+Les N lignes suivantes : Sur chaque ligne, le jour J de début et la durée D de location, séparés par un espace.
+Sortie
+Le nombre maximum de calculs qui pourront être effectués.
+Contraintes
+0 < N < 100000
+0 < J < 1000000
+0 < D < 1000
+Exemples
+Entrée
+
+4
+2 5
+9 7
+15 6
+9 3
+
+Sortie
+
+3
+
+Entrée
+
+5
+3 5
+9 2
+24 5
+16 9
+11 6
+
