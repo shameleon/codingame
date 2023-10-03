@@ -1,0 +1,170 @@
+
+
+Chez CodinGame on aime réinventer la roue. XML, JSON etc. c’est bien mais pour un web meilleur nous avons inventé notre propre format de données textuelles (nommé CGX) pour représenter de l’information structurée.​
+
+Voici un exemple de données structurée à la CGX :​
+Exemple de contenu CGX formaté.
+ 
+Représentation graphique de l'exemple.
+  
+​
+Un contenu CGX est composé d'ELEMENTs.
+
+ELEMENT
+Un ELEMENT peut être de type BLOC, TYPE_PRIMITIF ou CLE_VALEUR.
+
+BLOC
+Suite d'ELEMENTs séparés par le caractère ;
+Un BLOC commence par le marqueur ( et se termine par le marqueur ).
+
+TYPE_PRIMITIF
+Un nombre, un booléen, null, ou une chaîne de caractères (entourée par le marqueur ')
+
+CLE_VALEUR
+Une chaîne de caractères séparée d'un BLOC ou d’un TYPE_PRIMITIF par le caractère =
+ 
+
+Votre mission : écrire un programme capable de formater un contenu CGX pour le rendre lisible !
+
+​En dehors des règles ci-dessous, le résultat affiché ne contiendra aucun espace, tabulation ou retour chariot. Aucune autre règle ne devra être ajoutée.
+
+    Le contenu des chaînes de caractères ne doit pas être modifié.
+    Un BLOC commence sur sa propre ligne.
+    Les marqueurs de début et de fin d'un BLOC sont sur la même colonne.
+    Chaque ELEMENT contenu dans un BLOC est indenté de 4 espaces par rapport au marqueur de ce BLOC.
+    Une CLE_VALEUR commence sur sa propre ligne.
+    Un TYPE_PRIMITIF commence sur sa propre ligne sauf s'il est la valeur d'une CLE_VALEUR.
+
+ENTRÉE :
+Ligne 1 : Le nombre N de lignes CGX à formater
+Les N lignes suivantes : Le contenu CGX. Chaque ligne contient 1000 caractères maximum. Tous les caractères sont ASCII.
+
+SORTIE :
+Le contenu CGX formaté
+
+CONTRAINTES :
+Le contenu CGX fourni sera toujours valide.
+Les chaînes de caractères ne contiennent pas de caractère '
+0 < N < 10000
+
+EXEMPLE :
+Entrée
+4
+  
+
+     true
+ 
+Sortie
+true
+ 
+ 
+Entrée
+1
+'spaces and    tabs'
+Sortie
+'spaces and    tabs'
+ 
+ 
+Entrée
+1
+(0)
+ 
+Sortie
+(
+    0
+)
+ 
+ 
+Entrée
+1
+()
+Sortie
+(
+​)
+ 
+ 
+Entrée
+1
+(0;1;2)
+Sortie
+(
+    0;
+    1;
+    2
+​)
+ 
+ 
+Entrée
+1
+(('k1'=1);('k2'=2))
+Sortie
+(
+    (
+        'k1'=1
+    );
+    (
+        'k2'=2
+    )
+)
+ 
+ 
+Entrée
+10
+'users'=(('id'=10;
+'name'='Serge';
+'roles'=('visitor';
+'moderator'
+));
+('id'=11;
+'name'='Biales'
+);
+true
+)
+
+Sortie
+'users'=
+(
+    (
+        'id'=10;
+        'name'='Serge';
+        'roles'=
+        (
+            'visitor';
+            'moderator'
+        )
+    );
+    (
+        'id'=11;
+        'name'='Biales'
+    );
+    true
+)
+ 
+ 
+Entrée
+
+( 'user'= (
+    'key'='1= t(c)(';
+    'valid'=false
+  );
+  'user'= (
+    'key'=' = ; ';
+    'valid'= true
+  ); ()
+​)
+Sortie
+(
+    'user'=
+    (
+        'key'='1= t(c)(';
+        'valid'=false
+    );
+    'user'=
+    (
+        'key'=' = ; ';
+        'valid'=true
+    );
+    (
+    ​)
+​)
+ 

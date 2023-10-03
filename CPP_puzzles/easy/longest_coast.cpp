@@ -103,7 +103,7 @@ int     main(void)
     int n;
     cin >> n; cin.ignore();
     vector <vector <char>>      map;
-    vector <pair <int, int>>     island_queue;
+    vector <pair <int, int>>    island_queue;
 
     for (int i = 0; i < n; i++) {
         string row;
