@@ -1,4 +1,5 @@
 # codinggame
+
 [find me • jmouaike • codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
 
 ## SOLO PUZZLEs
@@ -43,6 +44,7 @@
 | Encryption/Decryption of Enigma Machine | C++ | EncodageChaînes de caractèresCryptologieString manipulation |
 | Unary | C++ | ConditionsBoucles Encodage strings |
 |[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | compression|
+
 
 
 
