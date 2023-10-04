@@ -8,49 +8,21 @@ https://www.programiz.com/python-programming/regex
 https://ruslanspivak.com/lsbasi-part7/
 """
 
-class Node:
-    """ stores elements """
-    def __init__(self, element_type, content, parent=None):
-        self.type = element_type
-        self.content = content
-        self.indent = 0
-        self.parent = parent
-        self.children = []
-
-    def is_root(self):
-        return self.parent is None
-
-    def is_leaf(self):
-        return len(self.children)
-
-    def depth(self):
-        if self.parent == None:
-            return 0
-        else:
-            return self.parent.depth() + 1
-
-    def search_children(self, digit):
-        for child in self.children:
-            if child.digit == digit:
-                return child
-        return None 
-
 class CgxLexerParser:
     def __init__(self, line):
         self.line = line
-        self.root = Node('Root', line)
-        self.nodes = []
-        self.lexer(self.root, line)
+        self.processline(line, 0)
 
-    def lexer(self, parent, line):
+    def lexer(self, parent, line, ):
+        i = 0
+        if line[i]
         line = line.lstrip()
         line = line.rstrip()
         if len(line) == 0:
             return
         if line[0] == '(' and line[-1] == ')':
             new = Node('Block', line[1: -1], parent)
-        elif line[0] == '\'':
-            "^'([^']*)'[ \t]*[^=]*$"
+        elif line[0] == '\'' and line[-1] == '\'':
             
             new = Node('KeyValue', line, parent)
             new = Node('Litteral', line, parent)
