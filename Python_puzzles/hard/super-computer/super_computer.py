@@ -2,64 +2,51 @@ import sys
 import math
 
 """
-class Leaf:
-    def __init__(self, key: tuple):
-        self.child = []
-        self.key = key
-        self.leaf = False
-    
-    def __str__(self):
-        return f'{self.key[0]}-{self.key[1]}'
-
-
-class BTree:
-    def __init__(self, n):
-        self.nb_leaves = n
-        self.root = Leaf((0, 0))
-
-    def insert(self, key: tuple):
-        leaf = Leaf(key)
-        root = self.root
-        if not root.leaf:
-            self.root.child.append(leaf)
-            self.root.leaf = True
-        else next = self.root.child.
+    objective : obtain the maximum jobs to do 
+                based on a set of dates
 """
 
-
-
-class CalcPlanner:
+class ComputerPlanner:
     def __init__(self, n):
-        self.reservations = [] 
-        self.denied = []
+        self.reservations = []
 
-    def find_dates(self):
+    def _remove_overlapping_dates(self):
+        """ remove current date if it overlap with previous """
+        for idx, date in enumerate(self.reservations):
+            if idx != 0:
+                if date[0] <= self.reservations[idx - 1][1]:
+                    self.reservations.pop(idx)
+
+    def find_best_dates(self):
+        """
+        1/ sort by date of end 
+        2/ pop element if its date overlap with previous element
+        """
         self.reservations.sort(key=lambda x : x[1])
-        max = self.reservations[-1][1]
-        print("max =", max, file=sys.stderr, flush=True)
-        for calc in self.reservations[:40]:
-            print(calc[0], calc[1], file=sys.stderr, flush=True)
+        print("len =", len(self.reservations),
+              "max_value =", self.reservations[-1][1],
+              file=sys.stderr, flush=True)
+        self._remove_overlapping_dates()
+        return len(self.reservations)
 
     def push(self, j, d):
+        """ push list [date of begin, date of end] to list """
         begin = j
         end = j + d - 1
-        self.reservations.append((begin, end))
+        self.reservations.append([begin, end])
 
-    def __str__(self):
-        return str(len(self.reservations))
 
 def main():
     n = int(input())
-    cal = CalcPlanner(n)
-    print("n =", n, file=sys.stderr, flush=True)
+    cal = ComputerPlanner(n)
     for i in range(n):
         j, d = [int(j) for j in input().split()]
         cal.push(j, d)
-    cal.find_dates()
-    print(cal)
+    max_jobs = cal.find_best_dates()
+    print(max_jobs)
+
 
 if __name__ == "__main__":
     main()
-# Write an answer using print
-# To debug: print("Debug messages...", file=sys.stderr, flush=True)
+
 

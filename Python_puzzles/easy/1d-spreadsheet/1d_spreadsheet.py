@@ -78,6 +78,7 @@ class SpreadSheet:
         for cell in self.cells:
             print(cell.res)
 
+
 def main():
     n = int(input())
     sheet = SpreadSheet(n)

@@ -1,12 +1,14 @@
 import sys
-from super_computer import CalcPlanner
+from super_computer import ComputerPlanner
 
 def test_super_computer_planner(n, input):
-    cal = CalcPlanner(n)
+    cal = ComputerPlanner(n)
     for date in input:
-        print(input, end=',', file=sys.stderr, flush=True)
         cal.push(date[0], date[1])
-    return cal.find_dates()
+    max_jobs = cal.find_best_dates()
+    print(max_jobs)
+    return max_jobs
+
 
 def test3():
     """ """
@@ -18,6 +20,7 @@ def test3():
     res = test_super_computer_planner(n, input)
     ans = 11
     print("test3", (res == ans) * "[OK]" + (res != ans) * "** FAIL **" )
+    print("#" * 20)
 
 
 def test2():
@@ -32,6 +35,7 @@ def test2():
     res = test_super_computer_planner(n, input)
     ans = 6
     print("test2", (res == ans) * "[OK]" + (res != ans) * "** FAIL **" )
+    print("#" * 20)
 
 
 def test1():
@@ -40,6 +44,7 @@ def test1():
     input = [[6, 3], [12, 8], [22, 5], [27, 2], [32, 4]]
     res = test_super_computer_planner(n, input)
     print("test1", (res == 5) * "[OK]" + (res != 5) * "** FAIL **" )
+    print("#" * 20)
 
 
 def main():
@@ -49,4 +54,4 @@ def main():
 
 
 if __name__ == "__main__":
-    test1()
+    main()
