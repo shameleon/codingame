@@ -1,0 +1,29 @@
+
+Mountain Map
+Meilleur score
+100
+Une contribution de rmnShk
+Approuvé par Aayush.Curious , Andrii.Bakulin et TBali
+ Objectif
+The task here is to print the ASCII representation of n mountains where the height of each mountain is given.
+Entrée
+Line 1: an integer n for the number of mountains
+Line 2: n space-separated integers for the height of each mountain
+Sortie
+An ASCII representation of the mountain where each rise in the mountain is represented by '/' and fall by '\'
+(Output lines shall not contain trailing spaces)
+Contraintes
+0<n<15
+0<height<15
+(every mountain's base starts on the bottom-most line)
+Exemple
+Entrée
+
+3
+1 2 1
+
+Sortie
+
+   /\
+/\/  \/\
+
