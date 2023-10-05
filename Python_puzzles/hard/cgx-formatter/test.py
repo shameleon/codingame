@@ -27,3 +27,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    """
+    (?<block>\(.*\))
+    (?<num_val>\d+)
+    (?<bool_val>true|false)
+    (?<primitive>\'\w+\')
+    (?<NESTED_BLOCK>\((\(.*\);)*\(.*\))
+    (?<key>\'\w+\'[^;)])
+    """
