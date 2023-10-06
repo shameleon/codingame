@@ -2,33 +2,73 @@ import sys
 import math
 import re
 
-""" 
-https://regexr.com/
-https://www.programiz.com/python-programming/regex
-https://ruslanspivak.com/lsbasi-part7/
-"""
+
 
 class Node:
-    def __init__(self, element_type, content, indent):
+    """ stores elements """
+    def __init__(self, content, parent=None, element_type=None):
         self.type = element_type
         self.content = content
-        self.indent = indent
-        self.childs = []
+        self.parent = parent
+        self.colon = False
+        self.children = []
+        self.depth = self.depth()
+        self.check_content()
+
+    def is_root(self):
+        return self.parent is None
+
+    def is_leaf(self):
+        return len(self.children)
+
+    def depth(self):
+        if self.parent == None:
+            return 0
+        else:
+            return self.parent.depth() + 1
+        
+    def check_content(self):
+        line = self.line
+        if line[-1] == ';':
+            self.colon = True
+            line = line[0:-1]
+        if self.line[0] == '(' and self.line[-1] == ')':
+            
+            for c in line:
+                c == '(':
+                    +=
+            
+        # rules = {'Bool_val': re.compile(r'(true|false){1}\;{0,1}'),
+        #          'Num_val': re.compile(r'\-?\d+(\.\d+)?'),
+        #          'Primitive': re.compile(r'\'(.[^\'])+\''),
+        #          'Key': re.compile(r'\'\w+\'='),
+        #          'Key-Value': re.compile(r'')}
+        # if self.type != None:
+        #     return
+        # for key, rule in rules.items():
+        #     m = re.fullmatch(rule, self.content)
+        #     m.span()
+    
+    def print_children(self):
+
 
 class CgxLexerParser:
     def __init__(self, line):
         self.line = line
-        self.ast_tree = []
-        self.ast_tree.append(Node('root', None, -1))
-        self.return_lines = []
-        # self.identify_element(line, 0)
-        self._next_token(line, 0)
+        self.root = []
+        self.nodes = []
+        self.lexer(self.root, line)
 
-    
-    def _print_token(self, token: str, indent: int, next_elem: bool, elem_type='Default'):
-        str = (" " * 4 * indent) + token + next_elem * ";"
-        endline = '\n'
-        print(str, end=endline)
+    def lexer(self, parent, line):
+        line = line.lstrip()
+        line = line.rstrip()
+        if len(line) == 0:
+            return
+        self.root.append(Node(line))
+
+    def print_tokens(self):
+        for root in self.root:
+            root.print_children()
 
     def _next_token(self, line, indent):
         """ lexer
@@ -67,55 +107,6 @@ class CgxLexerParser:
             elif num_val:
                 self._print_token(num_val.group(), indent, next_elem)
 
-
-        """
-        Do a regex search against all defined regexes and
-        return the key and match result of the first matching regex
-
-        r'\'?\-?\w+\''  matches to -42, 42, 'toto' 'titi42'
-        ^\((\-?\d)+(\;{1}\-?\d+)*\)$ (-250;-354545;-514352;1353135)
-
-       cgx_dict = {'Value': re.compile(r'\w[^();]{2,15}'),
-                   'key': re.compile(r'\'\w[^();]{2,15}\''),
-                   'Primitive': re.compile(r'\'\w[^();]{2,200}\''),
-                   'Block': re.compile(r'^\(.\($')}
-        cgx_dict = {'boolean': re.compile(r'true')}
-        # print(f'{indent}-level', file=sys.stderr, flush=True)
-        #for key, rx_cgx in cgx_dict.items():
-        # re.search(r'^(\-?\d+)(\;{1}\-?\d+)*$', line):
-        # match4 = re.search(r'^(\-?\d+)(\;{1}\-?\d+)*$', line)
-        # match1 = re.search(r'true|false', line)
-        # match6 = re.search(r'^\-?\d{1,15}\;?', line)
-        # if match4:
-        #     s4 = match4.group()
-        #     s4sub = re.sub(';', '; ', s4[1:-1])
-        #     s4splt = s4sub.split(' ')
-        #     for s in s4splt:
-        #         self._print_token(indent, line)
-        # # bool value
-        # elif match1:
-        #     self._print_token(indent, match1.group())
-        # elif match6:
-        #     self._print_token(indent, match6.group())
-        # primitive
-        # match2 = re.search(r'\'.[^();=]{2,200}\'', line)
-
-        # match3 = re.search(r'\((.+[^;])+.+\)', line)
-        # if match3:
-        #     s3 = match3.group()
-        #     print("(")
-        #     print("   ", s3[1:-1])
-        #     print(")")
-        # match4 = re.search(r'^\((\-?\d+)(\;{1}\-?\d+)*\)$', line)
-        # value
-        # match4 = re.search(r'^(\-?\d+)(\;{1}\-?\d+)*$', line)
-        # if match4:
-        #     s4 = match4.group()
-        #     s4sub = re.sub(';', '; ', s4[1:-1])
-        #     s4splt = s4sub.split(' ')
-        #     for s in s4splt:
-        #         print(" " * (4 * indent - 1), s)
-        """
 
 def main():
     n = int(input())

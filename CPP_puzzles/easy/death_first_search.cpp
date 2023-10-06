@@ -6,11 +6,6 @@
 
 using namespace std;
 
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
- **/
-
  // https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 class Graph
 {

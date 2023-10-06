@@ -1,6 +1,10 @@
 # codinggame
 
-[find me • jmouaike • codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
+[find me • jmouaike • level 15 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
+
+## Certifications
+
+[**Algorithms, silver**. Certification No 10119764 oct.04 2023](https://www.codingame.com/certification/PYzoUvkanjpLz5jOsH85UA)
 
 ## SOLO PUZZLEs
 
@@ -10,9 +14,8 @@
 
 | puzzle | language(s) | skills |
 | ----------- | -------- | ---------------------- |
-| Onboarding | Javascript | Conditions |
 | Power of Thor - ep.1 | Javascript, C++ | Conditions |
-| MArs lander - ep.1| C, C++ | Conditions |
+| Mars lander - ep.1| C, C++ | Conditions |
 | Ghost Legs  |  C |  Conditions loops |
 | Temperatures | C++ | loops array |
 | the descent | C++ | loops |
@@ -22,6 +25,7 @@
 | [logic gates](https://www.codingame.com/ide/puzzle/logic-gates) | C++ | logic |
 | [Lumen](https://www.codingame.com/training/easy/lumen)| Python| loops, 2D arrays|
 | [object-insertion](https://www.codingame.com/training/easy/object-insertion)| Python| loops, 2D arrays|
+|[Mountain map](https://www.codingame.com/training/easy/mountain-map)|Python|Ascii Art|
 
 #### Arrays, graphes, BDS, DFS
 
@@ -31,8 +35,8 @@
 | Detective Pikaptcha EP1 | C++ | Maze |
 | [Moves in maze](https://www.codingame.com/training/easy/moves-in-maze) | C++ | BFS floodfill |
 | abcdefghijklmnopqrstuvwxyz | C++ | BFS DFS Arrays |
-| Longest coast | C++ | DFS Arrays |
-| [1d-spreadsheet](https://www.codingame.com/training/easy/1d-spreadsheet)|Python| dependency graph, memoization, lazy evaluation|
+| [Longest coast](https://www.codingame.com/training/easy/longest-coast) | C++ | DFS Arrays |
+| [1d-spreadsheet](https://www.codingame.com/training/easy/1d-spreadsheet)|Python| Dependency graph, memoization, lazy evaluation|
 
 ### other : encryption, parsing
 
@@ -41,27 +45,32 @@
 | Credit Card Verifier (Luhn’s algorithm) | C | Check-digit|
 | Detective Geek | C | BouclesTableauxCryptologiestring |
 | Retro Typewriter Art | C++ | Parsing |
-| Encryption/Decryption of Enigma Machine | C++ | EncodageChaînes de caractèresCryptologieString manipulation |
+| [Encryption/Decryption of Enigma Machine](https://www.codingame.com/training/easy/encryptiondecryption-of-enigma-machine) | C++ | Encoding, Cryptology, Strings|
 | Unary | C++ | ConditionsBoucles Encodage strings |
-|[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | compression|
+|[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | Compression|
 
-
-
-
-### medium
+### Level **Medium** puzzles
 
 | puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-|  [the gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
-|  [what the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
+|  [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
+|  [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
 |  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
-|  [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%`` | trees, sets, tries|
+|  [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
+|  [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `80%` | 2D array, Finite State Machine |
 
-### hard
+### Level **hard** puzzles
 
 | puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-| [genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | `100%` | |
-| [surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` | |
-| [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |regex, strings, parsing|
-| [super computer](https://www.codingame.com/training/hard/super-computer) | Python | `0%` |greedy algorithm, Ordonnancement|
+| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | `100%` | Permutations |
+| [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
+| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
+| [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
+|[Binary neural network](https://www.codingame.com/training/hard/binary-neural-network---part-1)| Python | `0%` |Neural networks|
+
+### code Golf
+
+#### Cheatsheet for code golf
+
+[Codingaame.com Cheatsheet for code golf](https://www.codingame.com/blog/code-golf-python/?utm_source=codingame&utm_medium=details-page&utm_campaign=cg-blog&utm_content=chuck-norris-golf)
