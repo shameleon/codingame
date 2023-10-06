@@ -57,6 +57,7 @@
 |  [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
 |  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
 |  [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
+|  [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `80%` | 2D array, Finite State Machine |
 
 ### Level **hard** puzzles
 
@@ -67,3 +68,9 @@
 | [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
 | [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
 |[Binary neural network](https://www.codingame.com/training/hard/binary-neural-network---part-1)| Python | `0%` |Neural networks|
+
+### code Golf
+
+#### Cheatsheet for code golf
+
+[Codingaame.com Cheatsheet for code golf](https://www.codingame.com/blog/code-golf-python/?utm_source=codingame&utm_medium=details-page&utm_campaign=cg-blog&utm_content=chuck-norris-golf)
