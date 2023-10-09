@@ -8,7 +8,7 @@
 
 ## SOLO PUZZLEs
 
-### easy (all 100% score)
+### easy (all `100%` score)
 
 #### Conditions, loops
 
@@ -46,8 +46,9 @@
 | Detective Geek | C | BouclesTableauxCryptologiestring |
 | Retro Typewriter Art | C++ | Parsing |
 | [Encryption/Decryption of Enigma Machine](https://www.codingame.com/training/easy/encryptiondecryption-of-enigma-machine) | C++ | Encoding, Cryptology, Strings|
-| Unary | C++ | ConditionsBoucles Encodage strings |
+| Unary | C++, Python | ConditionsBoucles Encodage strings |
 |[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | Compression|
+|[MIME-type](https://www.codingame.com/training/easy/mime-type)|Python| Strings, Hash tables, Loops, Conditions|
 
 ### Level **Medium** puzzles
 
@@ -57,7 +58,9 @@
 |  [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
 |  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
 |  [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
-|  [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `80%` | 2D array, Finite State Machine |
+|  [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
+|  [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
+|  [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
 
 ### Level **hard** puzzles
 
@@ -67,7 +70,7 @@
 | [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
 | [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
 | [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
-|[Binary neural network](https://www.codingame.com/training/hard/binary-neural-network---part-1)| Python | `0%` |Neural networks|
+| [Binary neural network](https://www.codingame.com/training/hard/binary-neural-network---part-1)| Python | `0%` |Neural networks|
 
 ### code Golf
 

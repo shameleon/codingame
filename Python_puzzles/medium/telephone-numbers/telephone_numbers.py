@@ -1,6 +1,9 @@
 import sys
 import math
 
+""" progress : 100% """
+
+
 class Node:
     def __init__(self, digit, parent=None):
         self.level = 0
