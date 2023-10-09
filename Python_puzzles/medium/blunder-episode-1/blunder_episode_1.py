@@ -1,6 +1,9 @@
 import sys
 import math
 
+""" progress : 91% """
+
+
 class State:
     def __init__(self, grid):
         self.grid = grid
