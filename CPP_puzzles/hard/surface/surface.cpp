@@ -4,6 +4,8 @@
 #include <list>
 #include <algorithm>
 
+/* progress 60 % */
+
 using namespace std;
 
 

@@ -5,7 +5,11 @@
 
 using namespace std;
 
-/* First, if s1 is found inside s2.
+
+/*
+	progress 100%
+
+ First, if s1 is found inside s2.
 then if s1 3'-end matches to s2 5'-end */
 string     findSeq(string const s1, string const s2)
 {

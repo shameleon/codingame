@@ -6,4 +6,3 @@
 
 ```python
 print([A,B][X and Y])```
-
