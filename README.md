@@ -70,7 +70,7 @@
 | [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
 | [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
 | [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
-| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `69%` | DFS, Brute-force, Simulation|
+| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
 
 ### code Golf
 
