@@ -1,93 +1,69 @@
-#include <iostream>
-#include <string>
-#include <map>
-#include <list>
-#include <algorithm>
-
-using namespace std;
-
-/**
-progress : 0%
- **/
-
- // https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
-class Graph
-{
-    public:
-    map<int, bool>          visited;
-    map<int, list<int> >    adj;
-    vector <int>            gateway;
- 
-    // function to add an edge to graph
-    void addEdge(int v, int w);
-    void addGateway(int v);
-    // DFS traversal of the vertices
-    // reachable from v
-    void DFS(int v);
-};
-
-// https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
-void Graph::addEdge(int v, int w)
-{
-    adj[v].push_back(w); // Add w to v’s list.
-}
-
-void Graph::addGateway(int e)
-{
-    gateway.push_back(e); // Add w to v’s list.
-}
-
-//https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
-void Graph::DFS(int v)
-{
-    // Mark the current node as visited and
-    // print it
-    visited[v] = true;
-    cerr << "agent :" << v << endl;
- 
-    // Recur for all the vertices adjacent
-    // to this vertex
-    list<int>::iterator it;
-    for (it = adj[v].begin(); it != adj[v].end(); ++it)
-        if (!visited[*it])
-        {
-            DFS(*it);
-            cerr << *it << endl;
-        }
-}
- 
-int main()
-{
-    int n; // the total number of nodes in the level, including the gateways
-    int l; // the number of links
-    int e; // the number of exit gateways
-    cin >> n >> l >> e; cin.ignore();
-    cerr << n << ", " << l  << ", " << e << endl;
-    Graph   g;
-    for (int i = 0; i < l; i++) {
-        int n1; // N1 and N2 defines a link between these nodes
-        int n2;
-        cin >> n1 >> n2; cin.ignore();
-        cerr << n1 << ", " << n2  << endl;
-        g.addEdge(n1, n2);
-    }
-    vector <int> gateways;
-    for (int i = 0; i < e; i++) {
-        int ei; // the index of a gateway node
-        cin >> ei; cin.ignore();
-        g.addGateway(ei);
-    }
-
-    // game loop
-    while (1) {
-        int si; // The index of the node on which the Bobnet agent is positioned this turn
-        cin >> si; cin.ignore();
-        g.DFS(si);
-        // Write an action using cout. DON'T FORGET THE "<< endl"
-        // To debug: cerr << "Debug messages..." << endl;
+import sys
+import math
 
 
-        // Example: 0 1 are the indices of the nodes you wish to sever the link between
-        cout << "1 2" << endl;
-    }
-}
+class Graph:
+    def __init__(self, nb_nodes, nb_links, nb_gateways):
+        """ Adjacency list """
+        self.n = nb_nodes
+        self.l = nb_links
+        self.e = nb_gateways
+        self.nodes = range(self.n)
+        self.adj_list = {node: set() for node in self.nodes}
+        self.gateways = {node: False for node in self.nodes} 
+
+    def add_edge(self, node1, node2, weight=1):
+        self.adj_list[node1].add((node2, weight))
+        self.adj_list[node2].add((node2, weight))
+
+    def add_gateway(self, node):
+        self.adj_list[node1].add((node2, weight))
+        self.adj_list[node2].add((node2, weight))
+
+    def print_adj_list(self):
+        for key in self.adj_list.keys():
+            print("node", key, ": ", self.adj_list[key])
+
+    def dfs(self, start, target, path = [], visited = set()):
+        path.append(start)
+        visited.add(start)
+        if start == target:
+            return path
+        for (neighbour, weight) in self.adj_list[start]:
+            if neighbour not in visited:
+                result = self.dfs(neighbour, target, path, visited)
+                if result is not None:
+                    return result
+        path.pop()
+        return None   
+
+
+def main():
+    # n: the total number of nodes in the level, including the gateways
+    # l: the number of links
+    # e: the number of exit gateways
+    n, l, e = [int(i) for i in input().split()]
+    graph = Graph(n, l, e)
+
+    for i in range(l):
+        # n1: N1 and N2 defines a link between these nodes
+        n1, n2 = [int(j) for j in input().split()]
+        graph.add_edge(n1, n2)
+
+    for i in range(e):
+        ei = int(input())  # the index of a gateway node
+
+    # game loop
+    while True:
+        si = int(input())  # The index of the node on which the Bobnet agent is positioned this turn
+
+        # Write an action using print
+        # To debug: print("Debug messages...", file=sys.stderr, flush=True)
+
+
+        # Example: 0 1 are the indices of the nodes you wish to sever the link between
+        print("1 2")
+
+if __name__ == "__main__":
+    main()
+
