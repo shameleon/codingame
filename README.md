@@ -1,6 +1,6 @@
 # codinggame
 
-[find me • jmouaike • level 15 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
+[find me • jmouaike • level 16 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
 
 ## Certifications
 
@@ -70,7 +70,7 @@
 | [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
 | [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
 | [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
-| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `69%` | DFS, Brute-force, Simulation|
+| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
 
 ### code Golf
 
