@@ -32,8 +32,9 @@ class Graph:
         for key in self.gateways.keys():
             print("gateway",key, ": ", self.gateways[key], file=sys.stderr, flush=True)
 
-    def find_path(self, start):
-        """ finding a path for each gateway """
+    def severing_path(self, start):
+        """Finding shortests path for each gateway,
+        then overall shortest path, which last link  will be severedd"""
         pathes = []
         for gateway in self.gateways:
             if self.gateways[gateway]:
@@ -46,32 +47,27 @@ class Graph:
             print(shortest[-2], shortest[-1])
 
     def shortest_path(self, node1, node2):
-        path_list = [[node1]]
-        path_index = 0
-        # To keep track of previously visited nodes
-        previous_nodes = {node1}
+        """BFS, thus avoiding backtracking, 
+        List of the listed pathes"""
+        pathes = [[node1]]
+        idx = 0
+        visited = {node1}
         if node1 == node2:
-            return path_list[0]
-            
-        while path_index < len(path_list):
-            current_path = path_list[path_index]
-            last_node = current_path[-1]
-            next_nodes = self.adj_list[last_node]
-            # Search goal node
-            if node2 in next_nodes:
-                current_path.append(node2)
-                return current_path
-            # Add new paths
-            for next_node in next_nodes:
-                if not next_node in previous_nodes:
-                    new_path = current_path[:]
+            return pathes[0]       
+        while idx < len(pathes):
+            current = pathes[idx]
+            last = current[-1]
+            children = self.adj_list[last]
+            if node2 in children:
+                current.append(node2)
+                return current
+            for next_node in children:
+                if not next_node in visited:
+                    new_path = current[:]
                     new_path.append(next_node)
-                    path_list.append(new_path)
-                    # To avoid backtracking
-                    previous_nodes.add(next_node)
-            # Continue to next path in list
-            path_index += 1
-        # No path is found
+                    pathes.append(new_path)
+                    visited.add(next_node)
+            idx += 1
         return []
 
 @staticmethod
@@ -81,9 +77,11 @@ def get_shortest_list(lsts):
     return lsts[idx]
 
 def main():
-    # n: the total number of nodes in the level, including the gateways
-    # l: the number of links
-    # e: the number of exit gateways
+    """ 
+    n: the total number of nodes in the level, including the gateways
+    l: the number of links
+    e: the number of exit gateways
+    """
     n, l, e = [int(i) for i in input().split()]
     graph = Graph(n, l, e)
 
@@ -100,9 +98,7 @@ def main():
     while True:
         si = int(input())  # The index of the node on which the Bobnet agent is positioned this turn
         print("agent at", si, file=sys.stderr, flush=True)
-        graph.find_path(si)
-        # Write an action using print
-        # To debug: print("Debug messages...", file=sys.stderr, flush=True)
+        graph.severing_path(si)
         turn += 1
         
 

@@ -54,13 +54,14 @@
 
 | puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-|  [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
-|  [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
-|  [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
-|  [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
-|  [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
-|  [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
-|  [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
+| [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
+| [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
+| [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
+| [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
+| [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
+| [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
+| [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
+| [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python|`100%`|BFS, graphs|
 
 ### Level **hard** puzzles
 
