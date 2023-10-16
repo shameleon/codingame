@@ -62,6 +62,7 @@
 | [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
 | [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
 | [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python|`100%`|BFS, graphs|
+| [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions |
 
 ### Level **hard** puzzles
 
