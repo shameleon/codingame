@@ -72,6 +72,7 @@
 | [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
 | [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
 | [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
+| [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
 
 ### code Golf
 
