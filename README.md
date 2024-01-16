@@ -49,6 +49,7 @@
 | Unary | C++, Python | ConditionsBoucles Encodage strings |
 |[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | Compression|
 |[MIME-type](https://www.codingame.com/training/easy/mime-type)|Python| Strings, Hash tables, Loops, Conditions|
+|[Graffiti on the fence](https://www.codingame.com/training/easy/graffiti-on-the-fence)|Python|Intervals|
 
 ### Level **Medium** puzzles
 
