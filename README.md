@@ -1,6 +1,6 @@
 # codinggame
 
-[find me • jmouaike • level 16 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
+[find me • jmouaike • level 18 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
 
 ## Certifications
 
@@ -8,7 +8,33 @@
 
 ## SOLO PUZZLEs
 
-### easy (all `100%` score)
+### Difficulty **hard** puzzles
+
+| puzzle | language(s) | score | skills |
+| ----------- | -------- | ---- | ---------------------- |
+| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | `100%` | Permutations |
+| [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
+| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
+| [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
+| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
+| [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
+| [CGX Formatter](https://www.codingame.com/training/hard/cgx-formatter)| Python | `100%` | Regular Expressions, Parsing|
+
+### Difficulty **Medium** puzzles
+
+| puzzle | language(s) | score | skills |
+| ----------- | -------- | ---- | ---------------------- |
+| [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
+| [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
+| [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
+| [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
+| [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
+| [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
+| [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
+| [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python|`100%`|BFS, graphs|
+| [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions |
+
+### Difficulty easy (all `100%` score)
 
 #### Conditions, loops
 
@@ -37,6 +63,7 @@
 | abcdefghijklmnopqrstuvwxyz | C++ | BFS DFS Arrays |
 | [Longest coast](https://www.codingame.com/training/easy/longest-coast) | C++ | DFS Arrays |
 | [1d-spreadsheet](https://www.codingame.com/training/easy/1d-spreadsheet)|Python| Dependency graph, memoization, lazy evaluation|
+| [Reverse minesweeper](https://www.codingame.com/training/easy/reverse-minesweeper/solution)|Python| Conditions, 2D-arrays|
 
 ### other : encryption, parsing
 
@@ -50,31 +77,7 @@
 |[Fax machine](https://www.codingame.com/training/easy/fax-machine)| Python | Compression|
 |[MIME-type](https://www.codingame.com/training/easy/mime-type)|Python| Strings, Hash tables, Loops, Conditions|
 |[Graffiti on the fence](https://www.codingame.com/training/easy/graffiti-on-the-fence)|Python|Intervals|
-
-### Level **Medium** puzzles
-
-| puzzle | language(s) | score | skills |
-| ----------- | -------- | ---- | ---------------------- |
-| [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
-| [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
-| [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
-| [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
-| [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
-| [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
-| [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
-| [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python|`100%`|BFS, graphs|
-| [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions |
-
-### Level **hard** puzzles
-
-| puzzle | language(s) | score | skills |
-| ----------- | -------- | ---- | ---------------------- |
-| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | `100%` | Permutations |
-| [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
-| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
-| [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
-| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
-| [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
+|[Brackets, Extreme edition](https://www.codingame.com/training/easy/brackets-extreme-edition/solution)|Python| parsing |
 
 ### code Golf
 
