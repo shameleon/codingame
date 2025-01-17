@@ -22,7 +22,7 @@ class Graph
     void DFS(int v);
 };
 
-// https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
+
 void Graph::addEdge(int v, int w)
 {
     adj[v].push_back(w); // Add w to v’s list.
@@ -33,7 +33,6 @@ void Graph::addGateway(int e)
     gateway.push_back(e); // Add w to v’s list.
 }
 
-//https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 void Graph::DFS(int v)
 {
     // Mark the current node as visited and
