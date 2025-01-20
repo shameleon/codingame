@@ -77,6 +77,7 @@ void    print_time(char *time)
     int min = decrypted_time % 100;
     printf("%02d:%d\n", hours, min);
 }
+
 int main()
 {
     char time[33];
