@@ -10,35 +10,38 @@
 
 ### Difficulty **hard** puzzles
 
-| puzzle | language(s) | score | skills |
+| Codingame puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing) | C++ | `100%` | Permutations |
-| [Surface](https://www.codingame.com/training/hard/surface) | C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
-| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |    Greedy algorithms, Scheduling|
-| [CGX formatter](https://www.codingame.com/training/hard/cgx-formatter) | Python | `50%` |Strings, parsing|
+| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing)| C++ | `100%` | Permutations |
+| [Surface](https://www.codingame.com/training/hard/surface)| C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
+| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |   Greedy algorithms, Scheduling|
 | [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
 | [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
 | [CGX Formatter](https://www.codingame.com/training/hard/cgx-formatter)| Python | `100%` | Regular Expressions, Parsing|
+| [Staircases](https://www.codingame.com/training/hard/staircases)| Python | `100%` | Regular Expressions, Parsing|
+| [Don't panic episode 2](https://www.codingame.com/training/hard/don't-panic-episode-2)| Python | `40%` | BFS Pruning A* |
 
 ### Difficulty **Medium** puzzles
-
-| puzzle | language(s) | score | skills |
+| Codingame puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-| [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
-| [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | |
-| [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | |
+| [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | sequences, Lists, Loops |
+| [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python, C++|`100%`|BFS, graphs|
+| [Mayan Calculation](https://www.codingame.com/training/medium/mayan-calculation) | Python | `100%` | strings, radix|
+| [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions|
 | [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
-| [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine |
-| [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
 | [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
-| [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python|`100%`|BFS, graphs|
-| [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions |
+| [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
+| [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | interpreter |
 
+| [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
+| [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine|
+
+https://www.codingame.com/training/medium/mayan-calculation
 ### Difficulty easy (all `100%` score)
 
 #### Conditions, loops
 
-| puzzle | language(s) | skills |
+| Codingame puzzle | language(s) | skills |
 | ----------- | -------- | ---------------------- |
 | Power of Thor - ep.1 | Javascript, C++ | Conditions |
 | Mars lander - ep.1| C, C++ | Conditions |
