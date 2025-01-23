@@ -1,10 +1,15 @@
 
-Stunning numbers
-Best score
+# Stunning numbers
+
+### Best score
 80
+
+### author
 A contribution by VilBoub
 Approved by Antsurf , jddingemanse and FredericLocquet
- Goal
+
+### Goal
+
 When written with digits, some digits may still read when flipped (0, 1, 2, 5, 6, 8, and 9) while others mean nothing when flipped (3, 4, and 7).
 Once flipped, some integers remain identical like 69, they are called "stunning numbers"!
 Given an integer n, say whether it is "stunning" or not, then find the next "stunning number"...

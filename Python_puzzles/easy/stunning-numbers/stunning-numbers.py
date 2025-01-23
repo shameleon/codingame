@@ -1,8 +1,9 @@
 import sys
 
 """
-    80% success - 2 validators not ok
+    90% success - 1 validator not ok
 """
+
 
 class  StunningNumberSearch:
     def __init__(self, nb:str):
@@ -11,14 +12,14 @@ class  StunningNumberSearch:
         self.next_sn = self.get_next_stunnning_number(nb)
         print(self.next_sn)
 
-    def get_next_stunnning_number(self, nb: str):
+    def get_next_stunnning_number(self, nb: str, first_round=True):
         flippable_digit    = '012--56-89'
         next_flippable     = '0125556889'   
         symetric           = '012--59-86'
         l = len(nb)
         has_mid = (l % 2 == 1)
         size = l // 2 + 1 * has_mid
-        left = str(int((nb[:size])) + 1)
+        left = str(int((nb[:size])) + first_round)
         if len(left) > size:
             has_mid = True
         rev_right = ''
@@ -33,27 +34,25 @@ class  StunningNumberSearch:
         if has_mid:
             rev_right = rev_right[:-1]
         res = left + rev_right[::-1]
+        print(res, "*", file=sys.stderr, flush=True)
         if check_if_stunning(res):
             return res
         return self.stun_the_middle(res)
     
     def stun_the_middle(self, nb: str):
-        next_self_symetric = '1888888800'
-        next_flippable     = '1255568890'   
-        symetric           = '012--59-86'
+        next_self_symetric = '1255588800'
         l = len(nb)
         if not l % 2:
             return nb
         mid = l // 2
         c = next_self_symetric[int(nb[mid])]
-        nb = replace(nb, mid, c)
         if c == '0':
-            if l == 1:
-                return '11'
-            left_c = next_flippable[int(nb[mid - 1])]
-            nb = replace(nb, mid - 1, left_c)
-            right_c = symetric[int(left_c)]
-            nb = replace(nb, mid + 1, right_c)
+            print(nb, "C", file=sys.stderr, flush=True)
+            incr = str(int(nb[:mid]) + 1) + '0' * (l - mid)
+            print(incr, "incr", file=sys.stderr, flush=True)
+            nb = self.get_next_stunnning_number(incr, False)
+        else:
+            nb = replace(nb, mid, c)
         return nb
 
 
@@ -73,7 +72,7 @@ def flip_number(nb: str) -> str:
 def check_if_stunning(nb: str) -> bool:
     if cannot_be_flipped(nb):
         return False
-    if len(nb) % 2 and nb[len(nb) // 2] not in '018':
+    if len(nb) % 2 and nb[len(nb) // 2] not in '01258':
             return False
     if nb == flip_number(nb):
         return True
@@ -84,10 +83,12 @@ def main():
     """ tests """
     numbers = ['3', '69', '161', '9987', '654321', '1260921',
                '88888888', '123456789', '314159265359',
-               '6920158510269']
-    answers = ['8', '88', '181', '10001', '655559', '1261921',
+               '6920158510269', '9998666', '0', '33', '96',
+               '222', '56565', '9962']
+    answers = ['5', '88', '181', '10001', '655559', '1261921',
                '88896888', '125000521', '500000000005',
-               '6920160910269']
+               '6920160910269', '10000001', '1', '55', '101',
+               '252', '56595', '9966']
     result = []
     for i, number in enumerate(numbers):
         print(" " * 50, "test", i)
