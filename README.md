@@ -26,6 +26,7 @@
 | ----------- | -------- | ---- | ---------------------- |
 | [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | sequences, Lists, Loops |
 | [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python, C++|`100%`|BFS, graphs|
+|[dwarfs-standing-on-the-shoulders](https://www.codingame.com/training/medium/dwarfs-standing-on-the-shoulders-of-giants) | Python | `100%` | Tree traversal, DFS, Directed graph, Recursion |
 | [Mayan Calculation](https://www.codingame.com/training/medium/mayan-calculation) | Python | `100%` | strings, radix|
 | [Shadows of the knight episode 1](https://www.codingame.com/training/medium/shadows-of-the-knight-episode-1) |Python| `100%`| Binary search, Intervals, 2D array |
 | [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions|
