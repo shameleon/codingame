@@ -1,6 +1,6 @@
 # codinggame
 
-[find me • jmouaike • level 18 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
+[find me • jmouaike • level 20 •  codinggame.com](https://www.codingame.com/profile/eecc172724a1795985fdd230c13ec0e32605155)
 
 ## Certifications
 
