@@ -27,12 +27,12 @@
 | [Conway sequence](https://www.codingame.com/training/medium/conway-sequence) | C++ | `100%` | sequences, Lists, Loops |
 | [Death-first-search-episode-1](https://www.codingame.com/training/medium/death-first-search-episode-1)|Python, C++|`100%`|BFS, graphs|
 | [Mayan Calculation](https://www.codingame.com/training/medium/mayan-calculation) | Python | `100%` | strings, radix|
+| [Shadows of the knight episode 1](https://www.codingame.com/training/medium/shadows-of-the-knight-episode-1) |Python| `100%`| Binary search, Intervals, 2D array |
 | [Stock Exchange losses](https://www.codingame.com/training/medium/stock-exchange-losses) | Python, C++ | respec. `59%`, `100%` | Arrays, Loops, Conditions|
 | [Telephone numbers](https://www.codingame.com/training/medium/telephone-numbers) | Python | `100%` | trees, sets, tries|
 | [There-is-no-spoon-episode-1](https://www.codingame.com/training/medium/there-is-no-spoon-episode-1) | Python | `100%` | Lists |
 | [Tiny-forest](https://www.codingame.com/training/medium/tiny-forest) | Python | `100%` | Optimization, Simulation, 2D array |
 | [What the brainfuck](https://www.codingame.com/training/medium/what-the-brainfuck) | C++ | `100%` | interpreter |
-
 | [The gift](https://www.codingame.com/training/medium/the-gift) | C++ | `88%` | greedy algorithm |
 | [Blunder - Episode 1](https://www.codingame.com/training/medium/blunder-episode-1) | Python | `91%` | 2D array, Finite State Machine|
 
