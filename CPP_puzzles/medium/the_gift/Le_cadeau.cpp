@@ -17,10 +17,9 @@
 
 using namespace std;
 
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
- **/
+/* *
+ *   88% success
+ */
 
 int    ifsum_vec(vector<int> &vec, int &m, int threshold)
 {
