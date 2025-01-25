@@ -21,17 +21,10 @@ class RPN_Calculator:
         }
         self.defs = {}
 
-    def submit_token(self, token: str):
-        if token.lstrip('-').isdigit() \
-            or token in self.rpn.ops.keys() \
-            or token in self.defs.keys():
-            return True
-        return False
-
     def implement_instruction(self, token:str) -> None:
         print('s-----<', token, file=sys.stderr, flush=True)
         if token.lstrip('-').isdigit():
-            self.stack.append(token)
+            self.stack.append(int(token))
         elif token in self.ops.keys():
             self.ops[token]()
         elif token in self.defs.keys():
@@ -40,7 +33,6 @@ class RPN_Calculator:
             return None
         print('       ', self.stack, file=sys.stderr, flush=True)
         return None
-        # return 'FI' 'END'
     
     def implement_def(self, def_name: str):
         tokens = self.defs[def_name].copy()
@@ -49,48 +41,47 @@ class RPN_Calculator:
             token = tokens.pop(0)
             self.implement_instruction(token)
 
-    def add(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(a + b)
+    def rpn_operation(func):
+        def wrapper(self):
+            a = self.pop_nb()
+            b = self.pop_nb()
+            if a is not None and b is not None:
+                self.push_nb(func(self, a, b))
+        return wrapper
 
-    def substract(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(b - a)
+    @rpn_operation
+    def add(self, a, b):
+        return b + a
 
-    def multiply(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(a * b)
+    @rpn_operation
+    def substract(self, a, b):
+        return b - a
 
-    def divide(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None and b != 0:
-            self.push_nb(b // a)
+    @rpn_operation
+    def multiply(self, a, b):
+        return b - a
 
-    def modulo(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None and b != 0:
-            self.push_nb(b % a)
+    @rpn_operation
+    def divide(self, a, b):
+        if a != 0:
+            return b // a
+        else:
+            raise ZeroDivisionError("Division by zero is undefined.")
+
+    @rpn_operation
+    def modulo(self, a, b):
+        if a != 0:
+            return b % a
+        else:
+            raise ZeroDivisionError("Modulo by zero is undefined.")
 
     def swap_stack(self):
         nb = self.pop_nb()
         pos = len(self.stack)
-        self.stack.insert(pos - 1, str(nb))
+        self.stack.insert(pos - 1, nb)
 
     def pop_nb(self):
-        if not self.stack:
-            return None
-        nb = self.stack.pop()
-        if nb.isdigit() or nb.lstrip('-').isdigit():
-            return int(nb)
-        return None
+        return self.stack.pop() if self.stack else None
     
     def dup_nb(self):
         if not self.stack:
@@ -130,7 +121,7 @@ class RPN_Calculator:
             self.push_nb([0, 1][a == 0])
 
     def push_nb(self, nb: int):
-        self.stack.append(str(nb))
+        self.stack.append(nb)
 
     def out_to_stdout(self):
         if not self.stack:
