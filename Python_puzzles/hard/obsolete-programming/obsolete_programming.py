@@ -3,114 +3,109 @@ import math
 
 """ 50% success - 5 tests 5 validators out of 10 """
 
-import sys
-import math
 
-class ObsoleteProgrammer:
+class RPN_Calculator:
     def __init__(self):
         self.stack = []
-        self.ops = {'ADD': self.add,
-                    'SUB': self.substract,
-                    'MUL': self.multiply,
-                    'SUB': self.substract,
-                    'DIV': self.divide,
-                    'MOD': self.modulo,
-                    'POP': self.pop_nb,
-                    'DUP': self.dup_nb,
-                    'SWP': self.swap_stack,
-                    'ROT': self.rot_stack,
-                    'OVR': self.over_stack,
-                    'POS': self.pos_top_stack,
-                    'NOT': self.not_top_stack,
-                    'OUT': self.out_to_stdout
-                   }
+        self.ops = {
+            'ADD': self.add,
+            'SUB': self.substract,
+            'MUL': self.multiply,
+            'DIV': self.divide,
+            'MOD': self.modulo,
+            'POP': self.pop_nb,
+            'DUP': self.dup_nb,
+            'SWP': self.swap_stack,
+            'ROT': self.rot_stack,
+            'OVR': self.over_stack,
+            'POS': self.pos_top_stack,
+            'NOT': self.not_top_stack,
+            'OUT': self.out_to_stdout
+        }
         self.defs = {}
-    
-    def update_with_input(self, instructions: str):
-        self.instructions = instructions.split()
-        if self.capture_definition():
-            pass
-        else:
-            self.read_instructions()
+        self.is_in_cond_statement = False
+        self.if_else_buffer = []
 
-    def capture_definition(self):
-        line = self.instructions
-        if len(line) < 4 or line[0] != 'DEF' or line[-1] != 'END':
-            return False
-        line.pop()
-        line.pop(0)
-        def_name = line.pop(0)
-        self.defs[def_name] = list(line)
-        print('def ', def_name, ":", self.defs[def_name], file=sys.stderr, flush=True)
-        return True
 
-    def read_instructions(self) -> None:
-        if not self.instructions:
+    def implement_instruction(self, token:str) -> None:
+        if self.check_if_is_condition(token):
             return None
-        instr = self.instructions.pop(0)
-        print('------<', instr, file=sys.stderr, flush=True)
-        if instr.lstrip('-').isdigit():
-            self.stack.append(instr)
-        elif instr in self.ops.keys():
-            self.ops[instr]()
-        elif instr in self.defs.keys():
-            self.implement_def(instr)
+        print('s-----<', token, file=sys.stderr, flush=True)
+        if token.lstrip('-').isdigit():
+            self.stack.append(int(token))
+        elif token in self.ops.keys():
+            self.ops[token]()
+        elif token in self.defs.keys():
+            self.implement_def(token)
+        elif token == 'IF':
+            self.is_in_cond_statement = True
+            self.if_else_buffer.append(token)
+        else:
+            return None
         print('       ', self.stack, file=sys.stderr, flush=True)
-        self.read_instructions()
         return None
-
-    def implement_def(self, func_name: str):
-        instructions = self.defs[func_name].copy()
+    
+    def implement_def(self, def_name: str):
+        tokens = self.defs[def_name].copy()
         i = 0
-        while len(instructions) > 0:
-            instr = instructions.pop(0)
-            print ('       ', instr, file=sys.stderr, flush=True)
-            if instr.lstrip('-').isdigit():
-                self.stack.append(instr)
-            elif instr in self.ops.keys():
-                self.ops[instr]()
-            elif instr == 'IF':
-                cond = self.pop_nb()
-                conditionnal_instructions = []
-                instr2 = ''
-                while instr2 != 'FI':
-                    instr2 = instructions.pop(0)
-                    if cond:
-                        conditionnal_instructions.append(instr2)
-                    else:
-                        pass
-                instructions[:] = [*conditionnal_instructions, *instructions]
-            print('       ', self.stack, file=sys.stderr, flush=True)  
+        while len(tokens) > 0:
+            token = tokens.pop(0)
+            self.implement_instruction(token)
 
-    def add(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(a + b)
+    def check_if_is_condition(self, token):
+        if not self.is_in_cond_statement:
+            return False
+        self.if_else_buffer.append(token)
+        if token == 'FI':
+            self.is_in_cond_statement = False
+            self.parse_condition(self.pop_nb())
+        return True
+    
+    def parse_condition(self, cond_true: bool):
+        before_else = True
+        tmp = []
+        while len(self.if_else_buffer):
+            instr = self.if_else_buffer.pop(0)
+            if instr == 'ELSE':
+                before_else = False
+            if instr not in ['IF', 'ELSE', 'FI']:
+                if cond_true and before_else:
+                    tmp.append(instr)
+                elif not cond_true and not before_else:
+                    tmp.append(instr)
+        print('tmp---<', tmp, file=sys.stderr, flush=True)
+ 
+    def add(self, a, b):
+        if len(self.stack) >= 2:
+            a, b = [self.pop_nb() for _ in range(2)]
+            if a != None and b != None:
+                self.stack.append(b + a)
 
-    def multiply(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(a * b)
+    def substract(self, a, b):
+        if len(self.stack) >= 2:
+            a, b = [self.pop_nb() for _ in range(2)]
+            if a != None and b != None:
+                self.stack.append(b - a)
 
-    def substract(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None:
-            self.push_nb(b - a)
+    def multiply(self, a, b):
+        if len(self.stack) >= 2:
+            a, b = [self.pop_nb() for _ in range(2)]
+            if a != None and b != None:
+                self.stack.append(b - a)
 
-    def divide(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None and b != 0:
-            self.push_nb(b // a)
+    def divide(self, a, b):
+        if len(self.stack) >= 2:
+            a, b = [self.pop_nb() for _ in range(2)]
+            if a != None and b != None:
+                if a != 0:
+                    self.stack.append(b // a)
 
-    def modulo(self):
-        a = self.pop_nb()
-        b = self.pop_nb()
-        if a != None and b != None and b != 0:
-            self.push_nb(b % a)
+    def modulo(self, a, b):
+        if len(self.stack) >= 2:
+            a, b = [self.pop_nb() for _ in range(2)]
+            if a != None and b != None:
+                if a != 0:
+                    self.stack.append(b % a)
 
     def swap_stack(self):
         nb = self.pop_nb()

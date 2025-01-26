@@ -1,5 +1,45 @@
 import sys
 
+class Instruction:
+    def __init__(self, token):
+        self.token = token
+        self.is_cond = False
+        self.child_true = None
+        self.child_false = None
+        self.is_end = False
+
+    def add_children(self, instr_true, instr_false=None):
+        if instr_true:
+            self.child_true = Instruction(instr_true)
+            print(f'child to {self.token} : true {self.child_true.token}', file=sys.stderr, flush=True)
+    
+    def __repr__(self):
+        return f'{self.token} T-> {self.child_true} F-> {self.child_false}\n'
+
+
+class Definition:
+    def __init__(self, def_buffer: list):
+        self.name = def_buffer.pop(0)
+        self.head = Instruction(def_buffer.pop(0))
+        self.parse_buffer(self.head, def_buffer)
+
+    def parse_buffer(self, prev, def_buffer):
+        #if prev == None:
+        #    return
+        if len(def_buffer) == 0:
+            prev.end = True
+            return
+        prev.add_children(def_buffer.pop(0), None)
+        self.parse_buffer(prev.child_true, def_buffer)
+
+    def __repr__(self):
+        res = f'{self.name} :\n'
+        current = self.head
+        while current:
+            res += f'{current}'
+            current = current.child_true
+            return res
+        
 
 class RPN_Calculator:
     def __init__(self):
@@ -45,11 +85,11 @@ class RPN_Calculator:
         return None
     
     def implement_def(self, def_name: str):
-        tokens = self.defs[def_name].copy()
-        i = 0
-        while len(tokens) > 0:
-            token = tokens.pop(0)
-            self.implement_instruction(token)
+        definition = self.defs[def_name]
+        current = definition.head
+        while current != None:
+            self.implement_instruction(current.token)
+            current = current.child_true
 
     def check_if_is_condition(self, token):
         if not self.is_in_cond_statement:
@@ -171,36 +211,40 @@ class ObsoleteProgrammer:
         self.is_in_def = False
 
     def update_with_input(self, instructions: str):
+        """Parse tokens, either implementing instruction
+        or appending it to definition buffer until 'END' instruction comes out.
+        """
         tokens = instructions.split()
         while len(tokens):
             token = tokens.pop(0)
             if token == 'DEF':
                 self.is_in_def = True
             elif token == 'END':
+                print('def_buffer >', self.def_buffer, file=sys.stderr, flush=True)
                 self.buffer_to_definition()
                 self.is_in_def = False
             else :
                 if self.is_in_def:
                     self.def_buffer.append(token)
-                    # print("b <----", self.def_buffer, file=sys.stderr, flush=True)
                 else:
                     self.rpn.implement_instruction(token)
 
     def buffer_to_definition(self):
-        def_name = self.def_buffer.pop(0)
-        tmp = []
-        while len(self.def_buffer):
-            tmp.append(self.def_buffer.pop(0))
-        self.rpn.defs[def_name] = list(tmp)
-        print('def', def_name, self.rpn.defs[def_name], file=sys.stderr, flush=True)
-        # print("b <----", self.def_buffer, file=sys.stderr, flush=True)
+        """ upon 'END' instruction, empties definition buffer 
+        into a chained list of instructions"""
+        new_def = Definition(self.def_buffer)
+        self.rpn.defs[new_def.name] = new_def
+        print('defs >', self.rpn.defs, file=sys.stderr, flush=True)
+
 
 
 def main():
-    input_lines = [ 'DEF MAX OVR OVR SUB POS NOT IF SWP FI POP END',
-                    '5 3 MAX 3 7 MAX MAX -2 MAX 4 MAX OUT',
-                    '0 1 MAX 13 MAX DUP OUT 20 MAX 7 MAX OUT'
-                    ]
+    input_lines_0 = [ 'DEF PIZ SUB POS NOT',
+                   'IF SWP POP ELSE POP OVR FI POP END',
+                   '1 2 3 4 6 5 PIZ OUT'
+                   ]
+    input_lines = ['DEF BSH MOD SUB 4 SWP',
+                   'MUL MUL OUT END 5 6 3 2 BSH']
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
         obsolete.update_with_input(line)
@@ -208,4 +252,6 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
+
+
 
