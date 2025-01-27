@@ -17,7 +17,7 @@ class Instruction:
     
     def add_else_child_to_if(self, instr_false):
         self.child_false = Instruction(instr_false)
-        print(f'child to {self.token} : true {self.child_true.token}', file=sys.stderr, flush=True)
+        print(f'child to {self.token} : False {self.child_true.token}', file=sys.stderr, flush=True)
 
     def __repr__(self):
         return f'{self.token} T-> {self.child_true} F-> {self.child_false}\n'
@@ -39,11 +39,9 @@ class Definition:
         next_token = def_buffer.pop(0)
         if next_token == 'ELSE':
             self.is_true_branch = False
-            next_token  = def_buffer.pop(0)
-            self.if_fork.add_else_child_to_if(next_token)
+            self.if_fork.add_else_child_to_if(def_buffer.pop(0))
             self.end_of_true_branch = current
-            current = self.if_fork.child_false
-            self.parse_buffer(current.child_false, def_buffer)
+            self.parse_buffer(self.if_fork.child_false, def_buffer)
             return
         elif next_token == 'FI':
             if self.is_true_branch:
@@ -51,12 +49,13 @@ class Definition:
             else:
                 self.end_of_true_branch.add_child(def_buffer.pop(0))
                 current.child_true = self.end_of_true_branch.child_true
+            self.parse_buffer(current.child_true, def_buffer)
         else:
             current.add_child(next_token)
             if next_token == 'IF':
                 self.if_fork = current.child_true
                 self.is_if_fork = True    ## remove ?
-        self.parse_buffer(current.child_true, def_buffer)
+            self.parse_buffer(current.child_true, def_buffer)
 
 
     def __repr__(self):
