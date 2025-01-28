@@ -8,20 +8,26 @@ class Instruction:
         self.child_false = None
         self.is_end = False
         self.is_true_branch = True
+        self.line = 0
 
     def add_child(self, instr_true):
         if not instr_true:
             instr_true = 'END'
         self.child_true = Instruction(instr_true)
+        self.child_true.line = self.line
         print(f'child to {self.token} : true {self.child_true.token}', file=sys.stderr, flush=True)
     
     def add_else_child_to_if(self, instr_false):
         self.child_false = Instruction(instr_false)
-        print(f'child to {self.token} : False {self.child_true.token}', file=sys.stderr, flush=True)
+        self.child_false.line = self.line + 1
+        print(f'child to {self.token} : ' + \
+              f'true {self.child_true.token}, : false {self.child_false.token}', file=sys.stderr, flush=True)
 
     def __repr__(self):
-        return f'{self.token} T-> {self.child_true} F-> {self.child_false}\n'
-
+        if self.child_false:
+            return f'{self.token} T-> {self.child_true} \n' \
+                 + f'           \_ F-> {self.child_false}'
+        return f'{self.token} T-> {self.child_true} \n' 
 
 class Definition:
     def __init__(self, def_buffer: list):
@@ -38,18 +44,9 @@ class Definition:
             return
         next_token = def_buffer.pop(0)
         if next_token == 'ELSE':
-            self.is_true_branch = False
-            self.if_fork.add_else_child_to_if(def_buffer.pop(0))
-            self.end_of_true_branch = current
-            self.parse_buffer(self.if_fork.child_false, def_buffer)
-            return
+            self.fork_at_if_else(current, def_buffer)
         elif next_token == 'FI':
-            if self.is_true_branch:
-                current.add_child(def_buffer.pop(0))
-            else:
-                self.end_of_true_branch.add_child(def_buffer.pop(0))
-                current.child_true = self.end_of_true_branch.child_true
-            self.parse_buffer(current.child_true, def_buffer)
+            self.unite_true_and_false_branches(current, def_buffer)
         else:
             current.add_child(next_token)
             if next_token == 'IF':
@@ -57,6 +54,29 @@ class Definition:
                 self.is_if_fork = True    ## remove ?
             self.parse_buffer(current.child_true, def_buffer)
 
+    def fork_at_if_else(self, current, def_buffer):
+        print('current1', current, file=sys.stderr, flush=True)
+        self.is_true_branch = False
+        start_false_branch = def_buffer.pop(0)
+        print('tmp', start_false_branch, file=sys.stderr, flush=True)
+        self.if_fork.add_else_child_to_if(start_false_branch)
+        print('currentfork', self.if_fork, file=sys.stderr, flush=True)
+        self.end_of_true_branch = current
+        print('end true', self.end_of_true_branch, file=sys.stderr, flush=True)
+        print('start_false', self.if_fork.child_false, file=sys.stderr, flush=True)
+        self.parse_buffer(self.if_fork.child_false, def_buffer)
+
+    def unite_true_and_false_branches(self, current, def_buffer):
+        if len(def_buffer) > 0:
+            junction_token = def_buffer.pop(0)
+        else:
+            junction_token = 'END'
+        if self.is_true_branch:
+            current.add_child(junction_token)
+        else:
+            self.end_of_true_branch.add_child(junction_token)
+            current.child_true = self.end_of_true_branch.child_true
+        self.parse_buffer(current.child_true, def_buffer)
 
     def __repr__(self):
         res = f'{self.name} :\n'
@@ -97,10 +117,6 @@ class RPN_Calculator:
         elif token in self.defs.keys():
             print('def   >', token, file=sys.stderr, flush=True)
             self.implement_def(token)
-        elif token == 'IF':
-            # self.if_else_buffer.append(token)
-            # pop the top if true pick child accordingly
-            pass
         else:
             return None
         print('             ', self.stack, file=sys.stderr, flush=True)
@@ -110,9 +126,18 @@ class RPN_Calculator:
         definition = self.defs[def_name]
         current = definition.head
         while current != None:
-            self.implement_instruction(current.token)
-            ## what if child false
-            current = current.child_true
+            if current.token == 'IF':
+                top = self.pop_nb()
+                print('top stack>', top, file=sys.stderr, flush=True)
+                if top != None:
+                    current = [current.child_false, current.child_true][top == 1]
+                    print('IF>', current.token, file=sys.stderr, flush=True)
+                    #self.implement_instruction(current.token)
+                else:
+                    break
+            else:     
+                self.implement_instruction(current.token)
+                current = current.child_true
             
     def add(self):
         if len(self.stack) >= 2:
@@ -236,9 +261,8 @@ class ObsoleteProgrammer:
 
 
 def main():
-    input_lines = [ 'DEF PIZ OVR SUB POS IF ADD MOD ELSE MUL SUB FI SWP OUT',
-                   'END',
-                   '1 2 3 4 5 6 PIZ PIZ PIZ'
+    input_lines = [ 'DEF PIZ OVR SUB POS IF ADD MOD ELSE MUL SUB FI SWP OUT END',
+                   '1 2 3 4 5 6 1 2 3 4 PIZ PIZ'
                    ]
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
