@@ -23,6 +23,12 @@ class Instruction:
         print(f'child to {self.token} : ' + \
               f'true {self.child_true.token}, : false {self.child_false.token}', file=sys.stderr, flush=True)
 
+    def add_existing_child(self, other, branch=True):
+        if branch:
+            self.child_true = other
+        else:
+            self.child_false = other
+
     def __repr__(self):
         if self.child_false:
             return f'{self.token} T-> {self.child_true} \n' \
@@ -73,9 +79,11 @@ class Definition:
             junction_token = 'END'
         if self.is_true_branch:
             current.add_child(junction_token)
+            self.if_fork.add_existing_child(current.child_true, False)
+            print('unite', self.if_fork, file=sys.stderr, flush=True)
         else:
             self.end_of_true_branch.add_child(junction_token)
-            current.child_true = self.end_of_true_branch.child_true
+            current.child_true.add_existing_child(self.end_of_true_branch.child_true, True)
         self.parse_buffer(current.child_true, def_buffer)
 
     def __repr__(self):
@@ -131,12 +139,11 @@ class RPN_Calculator:
                 print('top stack>', top, file=sys.stderr, flush=True)
                 if top != None:
                     current = [current.child_false, current.child_true][top == 1]
-                    print('IF>', current.token, file=sys.stderr, flush=True)
-                    #self.implement_instruction(current.token)
                 else:
                     break
-            else:     
-                self.implement_instruction(current.token)
+            else:
+                if current.token != None:
+                    self.implement_instruction(current.token)
                 current = current.child_true
             
     def add(self):
@@ -261,9 +268,12 @@ class ObsoleteProgrammer:
 
 
 def main():
-    input_lines = [ 'DEF PIZ OVR SUB POS IF ADD MOD ELSE MUL SUB FI SWP OUT END',
-                   '1 2 3 4 5 6 1 2 3 4 PIZ PIZ'
+    input_lines_0 = [ 'DEF PIZ OVR SUB POS IF ADD MOD ELSE MUL SUB FI SWP OUT END',
+                   '1 2 3 4 5 6 1 2 3 4 PIZ PIZOUT'
                    ]
+    input_lines = [ 'DEF MAX OVR OVR SUB POS NOT IF SWP FI POP END',
+                '5 3 MAX 3 7 MAX'
+                ]
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
         obsolete.update_with_input(line)
