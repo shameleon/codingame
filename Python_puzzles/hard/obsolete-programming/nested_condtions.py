@@ -1,5 +1,6 @@
 import sys
 
+
 class Instruction:
     def __init__(self, idx: int, token: str):
         self.idx = idx
@@ -8,11 +9,10 @@ class Instruction:
         self.child_false = None
 
     def __repr__(self):
-        res = f'{self.idx}.{self.token} : T={self.child_true}\n'
+        res = f'{self.idx} = {self.token} : True {self.child_true}\n'
         if self.child_false != None:
-            res +=f'F={self.child_false}\n'
+            res += f'{self.idx}.{self.token} False {self.child_false}\n'
         return res
-
 
 class Definition:
     def __init__(self, def_buffer: list):
@@ -51,7 +51,6 @@ class Definition:
                     cond['FI'] = i
                 k -= 1
             i += 1
-        print(cond)
         return cond
     
     def link_instructions(self, idx1, idx2, child_type=True):
@@ -61,11 +60,11 @@ class Definition:
             self.instructions[idx1].child_false = self.instructions[idx2]
 
     def __repr__(self):
-        res = f'{self.name} : \n {self.instructions[0]}'
+        res = f'{self.name} : {self.instructions[0]}'
         return res 
 
 
-class TestInstructionsClass:
+class TestDefinitonClass:
     def __init__(self):
         #self.rpn = RPN_Calculator()
         self.def_buffer = []
@@ -106,7 +105,7 @@ def main():
     
     #                         0   1  2   3   4  5   6    7   8   9  0   11   12  13 14  15 16
     input_lines = [ 'DEF MAX OVR IF OVR IF MUL DIV ELSE TOP DUP FI NOT ELSE DUP TOP FI SWP POP END']
-    obsolete = TestInstructionsClass()
+    obsolete = TestDefinitonClass()
     for line in input_lines:
         obsolete.update_with_input(line)
 

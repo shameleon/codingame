@@ -1,101 +1,77 @@
 import sys
 
+
+""" 70% success
+OK : tests 1:5, 7 validators 1:5, 7, 8 """
+
 class Instruction:
-    def __init__(self, token):
+    """ A node for definition's indiviual instruction token.
+    Only 'IF' token has not-None child_false linked to 'ELS' or 'FI' node"""
+    def __init__(self, idx: int, token: str):
+        self.idx = idx
         self.token = token
-        self.is_if_fork = False
         self.child_true = None
         self.child_false = None
-        self.is_end = False
-        self.is_true_branch = True
-        self.line = 0
-
-    def add_child(self, instr_true):
-        if not instr_true:
-            instr_true = 'END'
-        self.child_true = Instruction(instr_true)
-        self.child_true.line = self.line
-        print(f'child to {self.token} : true {self.child_true.token}', file=sys.stderr, flush=True)
-    
-    def add_else_child_to_if(self, instr_false):
-        self.child_false = Instruction(instr_false)
-        self.child_false.line = self.line + 1
-        print(f'child to {self.token} : ' + \
-              f'true {self.child_true.token}, : false {self.child_false.token}', file=sys.stderr, flush=True)
-
-    def add_existing_child(self, other, branch=True):
-        if branch:
-            self.child_true = other
-        else:
-            self.child_false = other
 
     def __repr__(self):
-        if self.child_false:
-            return f'{self.token} T-> {self.child_true} \n' \
-                 + f'           \_ F-> {self.child_false}'
-        return f'{self.token} T-> {self.child_true} \n' 
+        res = f'{self.idx} = {self.token} : True {self.child_true}\n'
+        if self.child_false != None:
+            res += f'{self.idx}.{self.token} False {self.child_false}\n'
+        return res
 
 class Definition:
+    """ RPN definition instructions are parsed to a linked list"""
     def __init__(self, def_buffer: list):
         self.name = def_buffer.pop(0)
-        self.if_fork = None
-        self.end_of_true_branch = None
-        self.is_true_branch = True
-        self.head = Instruction(def_buffer.pop(0))
-        self.parse_buffer(self.head, def_buffer)
+        self.instructions = [Instruction(i, x) for i, x in enumerate(def_buffer)]
+        self.index_based_linking_instructions(def_buffer)
 
-    def parse_buffer(self, current, def_buffer):
-        if len(def_buffer) == 0:
-            current.add_child('END')
-            return
-        next_token = def_buffer.pop(0)
-        if next_token == 'ELSE':
-            self.fork_at_if_else(current, def_buffer)
-        elif next_token == 'FI':
-            self.unite_true_and_false_branches(current, def_buffer)
-        else:
-            current.add_child(next_token)
-            if next_token == 'IF':
-                self.if_fork = current.child_true
-                self.is_if_fork = True    ## remove ?
-            self.parse_buffer(current.child_true, def_buffer)
+    def index_based_linking_instructions(self, def_buffer):
+        """Link pairwise except before an ELSE. then link conditions"""
+        for i, instr in enumerate(self.instructions):
+            if i > 0 and instr.token != 'ELS':
+                self.instructions[i - 1].child_true = instr
+        if_indices = [idx for idx, x in enumerate(def_buffer) if x == 'IF']
+        for if_idx in if_indices:
+            cond = self.get_condition_indexes(if_idx, def_buffer)
+            if cond['ELS'] == None:
+                self.link_instructions(cond['IF'], cond['FI'], False)
+            else:
+                self.link_instructions(cond['IF'], cond['ELS'], False)
+                self.link_instructions(cond['ELS'] - 1, cond['FI'], True)
 
-    def fork_at_if_else(self, current, def_buffer):
-        print('current1', current, file=sys.stderr, flush=True)
-        self.is_true_branch = False
-        start_false_branch = def_buffer.pop(0)
-        print('tmp', start_false_branch, file=sys.stderr, flush=True)
-        self.if_fork.add_else_child_to_if(start_false_branch)
-        print('currentfork', self.if_fork, file=sys.stderr, flush=True)
-        self.end_of_true_branch = current
-        print('end true', self.end_of_true_branch, file=sys.stderr, flush=True)
-        print('start_false', self.if_fork.child_false, file=sys.stderr, flush=True)
-        self.parse_buffer(self.if_fork.child_false, def_buffer)
-
-    def unite_true_and_false_branches(self, current, def_buffer):
-        if len(def_buffer) > 0:
-            junction_token = def_buffer.pop(0)
+    def get_condition_indexes(self, start_idx, tokens):
+        i = start_idx
+        k = -1
+        cond = dict(zip(['IF', 'ELS', 'FI'], [None] * 3))
+        while i < len(tokens):
+            if tokens[i] == 'IF':
+                if cond['IF'] == None:
+                    cond['IF'] = i
+                k += 1
+            elif tokens[i] == 'ELS':
+                if k == 0 and cond['ELS'] == None:
+                    cond['ELS'] = i
+            elif tokens[i] == 'FI':
+                if k == 0 and cond['FI'] == None:
+                    cond['FI'] = i
+                k -= 1
+            i += 1
+        return cond
+    
+    def link_instructions(self, idx1, idx2, child_type=True):
+        if child_type:
+            self.instructions[idx1].child_true = self.instructions[idx2]
         else:
-            junction_token = 'END'
-        if self.is_true_branch:
-            current.add_child(junction_token)
-            self.if_fork.add_existing_child(current.child_true, False)
-            print('unite', self.if_fork, file=sys.stderr, flush=True)
-        else:
-            self.end_of_true_branch.add_child(junction_token)
-            current.child_true.add_existing_child(self.end_of_true_branch.child_true, True)
-        self.parse_buffer(current.child_true, def_buffer)
+            self.instructions[idx1].child_false = self.instructions[idx2]
 
     def __repr__(self):
-        res = f'{self.name} :\n'
-        current = self.head
-        while current:
-            res += f'{current}'
-            current = current.child_true
-            return res
-        
+        res = f'{self.name} : {self.instructions[0]}'
+        return res 
+
 
 class RPN_Calculator:
+    """"holds the RPN stack, operations and definitions"""
     def __init__(self):
         self.stack = []
         self.ops = {
@@ -127,12 +103,12 @@ class RPN_Calculator:
             self.implement_def(token)
         else:
             return None
-        print('             ', self.stack, file=sys.stderr, flush=True)
+        print(' ' * 15, self.stack, file=sys.stderr, flush=True)
         return None
     
     def implement_def(self, def_name: str):
         definition = self.defs[def_name]
-        current = definition.head
+        current = definition.instructions[0]
         while current != None:
             if current.token == 'IF':
                 top = self.pop_nb()
@@ -259,21 +235,86 @@ class ObsoleteProgrammer:
 
     def buffer_to_definition(self):
         """ upon 'END' instruction, empties definition buffer 
-        into a chained list of instructions"""
+        into a linked list of instructions"""
         if len(self.def_buffer) > 1:
             new_def = Definition(self.def_buffer)
             self.rpn.defs[new_def.name] = new_def
         print('defs >', self.rpn.defs, file=sys.stderr, flush=True)
 
 
+def test_6():
+    input_lines = [' DEF ABS DUP POS NOT IF 0 SWP SUB FI END ',
+                   ' 51 ABS OUT -5 ABS OUT 0 ABS OUT ', ' DEF NZ ',
+                   '   OVR ABS OVR ABS SUB ', '   DUP NOT ',
+                   '   IF POP DUP POS IF SWP FI ',
+                   '   ELS '
+                    '     POS IF SWP FI ',
+                    '   FI ',
+                    '   POP ',
+                    ' END ',
+                    ' 1 -2 NZ -8 NZ 4 NZ 5 NZ OUT ',
+                    ' -12 -5 NZ -137 NZ OUT ',
+                    ' 42 -5 NZ 12 NZ 21 NZ 5 NZ 24 NZ OUT ',
+                    ' 42 5 NZ 12 NZ 21 NZ -5 NZ 24 NZ OUT ',
+                    ' -5 -4 NZ -2 12 NZ NZ -40 4 NZ 2 18 NZ NZ NZ ',
+                    ' 11 5 NZ NZ OUT '
+                    ]
+
+    """
+    ' DEF ABS DUP POS NOT IF 0 SWP SUB FI END '
+    ' 51 ABS OUT -5 ABS OUT 0 ABS OUT '
+    51
+    5
+    0
+    ' DEF NZ '
+    '   OVR ABS OVR ABS SUB '
+    '   DUP NOT '
+    '   IF POP DUP POS IF SWP FI '
+    '   ELS '
+    '     POS IF SWP FI '
+    '   FI '
+    '   POP '
+    ' END '
+    ' 1 -2 NZ -8 NZ 4 NZ 5 NZ OUT '
+    5
+    ' -12 -5 NZ -137 NZ OUT '
+    -137
+    ' 42 -5 NZ 12 NZ 21 NZ 5 NZ 24 NZ OUT '
+    24
+    ' 42 5 NZ 12 NZ 21 NZ -5 NZ 24 NZ OUT '
+    24
+    ' -5 -4 NZ -2 12 NZ NZ -40 4 NZ 2 18 NZ NZ NZ '
+    ' 11 5 NZ NZ OUT '
+    5
+                    ]
+    """
+    return input_lines
+
+def test8():
+    input_lines = [' DEF SQ DUP MUL END ',
+                    ' DEF PL DUP OUT SQ OUT END ',
+                    ' DEF PR OVR PL ',
+                    '   SWP 1 ADD OVR OVR SUB POS  ',
+                    '   IF SWP PR ELS POP POP FI ',
+                    ' END ',
+                    ' 1 5 PR ',
+                    ' 30 33 PR ']
+    return input_lines
+
+
+def test9():
+    """" Hello Fibonacci ! """
+    input_lines = [' DEF RFIB DUP  '
+                    '   IF 1 SUB ROT ROT DUP ROT ADD ROT RFIB  '
+                    '   ELS POP POP FI  '
+                    ' END '
+                    ' DEF FIB 0 1 ROT RFIB END '
+                    ' 5 FIB OUT 6 FIB OUT 2 FIB OUT 10 FIB OUT ']
+    return input_lines
 
 def main():
-    input_lines_0 = [ 'DEF PIZ OVR SUB POS IF ADD MOD ELSE MUL SUB FI SWP OUT END',
-                   '1 2 3 4 5 6 1 2 3 4 PIZ PIZOUT'
-                   ]
-    input_lines = [ 'DEF MAX OVR OVR SUB POS NOT IF SWP FI POP END',
-                '5 3 MAX 3 7 MAX'
-                ]
+
+    input_lines = test9()
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
         obsolete.update_with_input(line)
@@ -281,6 +322,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-
-
-
