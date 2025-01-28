@@ -1,45 +1,68 @@
 import sys
 
 class Instruction:
-    def __init__(self, token):
+    def __init__(self, idx: int, token: str):
+        self.idx = idx
         self.token = token
+        self.child_true = None
+        self.child_false = None
+
+    def __repr__(self):
+        res = f'{self.idx}.{self.token} : T={self.child_true}\n'
+        if self.child_false != None:
+            res +=f'F={self.child_false}\n'
+        return res
+
 
 class Definition:
     def __init__(self, def_buffer: list):
         self.name = def_buffer.pop(0)
-        self.splice_conditions(def_buffer)
+        self.instructions = [Instruction(i, x) for i, x in enumerate(def_buffer)]
+        self.index_based_linking_instructions(def_buffer)
 
-    def splice_conditions(self, tokens):
-        # for i, token in enumerate(instructions):
-        # first_if = tokens.index('IF', 0, len(tokens))
-        i = 0
+    def index_based_linking_instructions(self, def_buffer):
+        """Link pairwise except before an ELSE. then link conditions"""
+        for i, instr in enumerate(self.instructions):
+            if i > 0 and  instr.token != 'ELSE':
+                self.instructions[i - 1].child_true = instr
+        if_indexes = [idx for idx, x in enumerate(def_buffer) if x == 'IF']
+        for if_idx in if_indexes:
+            cond = self.get_condition_indexes(if_idx, def_buffer)
+            if cond['ELSE'] == None:
+                self.link_instructions(cond['IF'], cond['FI'], False)
+            else:
+                self.link_instructions(cond['IF'], cond['ELSE'], False)
+                self.link_instructions(cond['ELSE'] - 1, cond['FI'], True)
+
+    def get_condition_indexes(self, start_idx, tokens):
+        i = start_idx
         k = -1
-        cond = [None] * 3
+        cond = dict(zip(['IF', 'ELSE', 'FI'], [None] * 3))
         while i < len(tokens):
             if tokens[i] == 'IF':
-                if cond[0] == None:
-                    cond[0] = i
-                    k += 1
-                else:
-                    k += 1
+                if cond['IF'] == None:
+                    cond['IF'] = i
+                k += 1
             elif tokens[i] == 'ELSE':
-                if k == 0 and cond[1] == None:
-                    cond[1] = i
+                if k == 0 and cond['ELSE'] == None:
+                    cond['ELSE'] = i
             elif tokens[i] == 'FI':
-                if k == 0 and cond[2] == None:
-                    cond[2] = i
-                else:
-                    k -= 1
+                if k == 0 and cond['FI'] == None:
+                    cond['FI'] = i
+                k -= 1
             i += 1
-            a, b, c = cond
-        if b:
-            print(tokens[a:b], tokens[b:c])
-        else:
-            print(tokens[a:c])
+        print(cond)
+        return cond
     
+    def link_instructions(self, idx1, idx2, child_type=True):
+        if child_type:
+            self.instructions[idx1].child_true = self.instructions[idx2]
+        else:
+            self.instructions[idx1].child_false = self.instructions[idx2]
+
     def __repr__(self):
-        res = f'{self.name} :\n'
-        return res
+        res = f'{self.name} : \n {self.instructions[0]}'
+        return res 
 
 
 class TestInstructionsClass:
@@ -71,7 +94,7 @@ class TestInstructionsClass:
         if len(self.def_buffer) > 1:
             new_def = Definition(self.def_buffer)
             self.defs[new_def.name] = new_def
-        print('defs >', self.defs, file=sys.stderr, flush=True)
+        print('def >', new_def, file=sys.stderr, flush=True)
 
 
 def main():
@@ -81,8 +104,8 @@ def main():
                     '0 1 MAX 13 MAX DUP OUT 20 MAX 7 MAX OUT'
                     ]
     
-    #                         0   1  2   3   4  5   6    7   8   9  0   11   12  13 14  15
-    input_lines = [ 'DEF MAX OVR IF OVR IF MUL DIV ELSE TOP DUP FI IF TOP ELSE DUP FI ADD SWP ELSE DUP NOT  IF TOP FI IF TOP ELSE DUP FI TOP FI SWP POP END']
+    #                         0   1  2   3   4  5   6    7   8   9  0   11   12  13 14  15 16
+    input_lines = [ 'DEF MAX OVR IF OVR IF MUL DIV ELSE TOP DUP FI NOT ELSE DUP TOP FI SWP POP END']
     obsolete = TestInstructionsClass()
     for line in input_lines:
         obsolete.update_with_input(line)
