@@ -19,6 +19,7 @@
 | [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
 | [CGX Formatter](https://www.codingame.com/training/hard/cgx-formatter)| Python | `100%` | Regular Expressions, Parsing|
 | [Staircases](https://www.codingame.com/training/hard/staircases)| Python | `100%` | Regular Expressions, Parsing|
+| [Obsolete Programming](https://www.codingame.com/training/hard/obsolete-programming) | Python | `100%` | Parsing, Interpreter |
 | [Don't panic episode 2](https://www.codingame.com/training/hard/don't-panic-episode-2)| Python | `40%` | BFS Pruning A* |
 
 ### Difficulty **Medium** puzzles
