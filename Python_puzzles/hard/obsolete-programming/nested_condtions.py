@@ -93,6 +93,7 @@ class TestDefinitonClass:
         if len(self.def_buffer) > 1:
             new_def = Definition(self.def_buffer)
             self.defs[new_def.name] = new_def
+            self.def_buffer.clear()
         print('def >', new_def, file=sys.stderr, flush=True)
 
 

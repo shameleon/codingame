@@ -1,8 +1,11 @@
 import sys
 
 
-""" 70% success
-OK : tests 1:5, 7 validators 1:5, 7, 8 """
+""" 80% success
+OK : tests 1:8,  validators 1:8 """
+
+import sys
+
 
 class Instruction:
     """ A node for definition's indiviual instruction token.
@@ -27,7 +30,7 @@ class Definition:
         self.index_based_linking_instructions(def_buffer)
 
     def index_based_linking_instructions(self, def_buffer):
-        """Link pairwise except before an ELSE. then link conditions"""
+        """Link pairwise except before an ELS. then link conditions"""
         for i, instr in enumerate(self.instructions):
             if i > 0 and instr.token != 'ELS':
                 self.instructions[i - 1].child_true = instr
@@ -112,7 +115,7 @@ class RPN_Calculator:
         while current != None:
             if current.token == 'IF':
                 top = self.pop_nb()
-                print('top stack>', top, file=sys.stderr, flush=True)
+                #print('top stack>', top, file=sys.stderr, flush=True)
                 if top != None:
                     current = [current.child_false, current.child_true][top == 1]
                 else:
@@ -224,7 +227,7 @@ class ObsoleteProgrammer:
             if token == 'DEF':
                 self.is_in_def = True
             elif token == 'END':
-                print('def_buffer >', self.def_buffer, file=sys.stderr, flush=True)
+                #print('def_buffer >', self.def_buffer, file=sys.stderr, flush=True)
                 self.buffer_to_definition()
                 self.is_in_def = False
             else :
@@ -237,72 +240,22 @@ class ObsoleteProgrammer:
         """ upon 'END' instruction, empties definition buffer 
         into a linked list of instructions"""
         if len(self.def_buffer) > 1:
+            print('buff  >', self.def_buffer, file=sys.stderr, flush=True)
             new_def = Definition(self.def_buffer)
             self.rpn.defs[new_def.name] = new_def
+            self.def_buffer.clear()
         print('defs >', self.rpn.defs, file=sys.stderr, flush=True)
 
 
-def test_6():
-    input_lines = [' DEF ABS DUP POS NOT IF 0 SWP SUB FI END ',
-                   ' 51 ABS OUT -5 ABS OUT 0 ABS OUT ', ' DEF NZ ',
-                   '   OVR ABS OVR ABS SUB ', '   DUP NOT ',
-                   '   IF POP DUP POS IF SWP FI ',
-                   '   ELS '
-                    '     POS IF SWP FI ',
-                    '   FI ',
-                    '   POP ',
-                    ' END ',
-                    ' 1 -2 NZ -8 NZ 4 NZ 5 NZ OUT ',
-                    ' -12 -5 NZ -137 NZ OUT ',
-                    ' 42 -5 NZ 12 NZ 21 NZ 5 NZ 24 NZ OUT ',
-                    ' 42 5 NZ 12 NZ 21 NZ -5 NZ 24 NZ OUT ',
-                    ' -5 -4 NZ -2 12 NZ NZ -40 4 NZ 2 18 NZ NZ NZ ',
-                    ' 11 5 NZ NZ OUT '
-                    ]
-
-    """
-    ' DEF ABS DUP POS NOT IF 0 SWP SUB FI END '
-    ' 51 ABS OUT -5 ABS OUT 0 ABS OUT '
-    51
-    5
-    0
-    ' DEF NZ '
-    '   OVR ABS OVR ABS SUB '
-    '   DUP NOT '
-    '   IF POP DUP POS IF SWP FI '
-    '   ELS '
-    '     POS IF SWP FI '
-    '   FI '
-    '   POP '
-    ' END '
-    ' 1 -2 NZ -8 NZ 4 NZ 5 NZ OUT '
-    5
-    ' -12 -5 NZ -137 NZ OUT '
-    -137
-    ' 42 -5 NZ 12 NZ 21 NZ 5 NZ 24 NZ OUT '
-    24
-    ' 42 5 NZ 12 NZ 21 NZ -5 NZ 24 NZ OUT '
-    24
-    ' -5 -4 NZ -2 12 NZ NZ -40 4 NZ 2 18 NZ NZ NZ '
-    ' 11 5 NZ NZ OUT '
-    5
-                    ]
-    """
-    return input_lines
-
-def test8():
-    input_lines = [' DEF SQ DUP MUL END ',
-                    ' DEF PL DUP OUT SQ OUT END ',
-                    ' DEF PR OVR PL ',
-                    '   SWP 1 ADD OVR OVR SUB POS  ',
-                    '   IF SWP PR ELS POP POP FI ',
-                    ' END ',
-                    ' 1 5 PR ',
-                    ' 30 33 PR ']
+def test09b():
+    input_lines = ['DEF RFIB DUP IF 1 SUB ROT ROT DUP ROT ADD ROT RFIB ELS POP POP FI END',
+                    'DEF FIB 0 1 ROT RFIB END',
+                    '5 FIB OUT'
+    ]
     return input_lines
 
 
-def test9():
+def test09():
     """" Hello Fibonacci ! """
     input_lines = [' DEF RFIB DUP  '
                     '   IF 1 SUB ROT ROT DUP ROT ADD ROT RFIB  '
@@ -312,9 +265,9 @@ def test9():
                     ' 5 FIB OUT 6 FIB OUT 2 FIB OUT 10 FIB OUT ']
     return input_lines
 
-def main():
 
-    input_lines = test9()
+def main():
+    input_lines = test09b()
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
         obsolete.update_with_input(line)
