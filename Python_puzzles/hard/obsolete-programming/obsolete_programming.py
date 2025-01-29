@@ -1,10 +1,6 @@
 import sys
 
-
-""" 80% success
-OK : tests 1:8,  validators 1:8 """
-
-import sys
+""" 100% success """
 
 
 class Instruction:
@@ -21,6 +17,7 @@ class Instruction:
         if self.child_false != None:
             res += f'{self.idx}.{self.token} False {self.child_false}\n'
         return res
+
 
 class Definition:
     """ RPN definition instructions are parsed to a linked list"""
@@ -96,17 +93,13 @@ class RPN_Calculator:
 
     def implement_instruction(self, token:str) -> None:
         if token.lstrip('-').isdigit():
-            print('push  >', token, file=sys.stderr, flush=True)
             self.stack.append(int(token))
         elif token in self.ops.keys():
-            print('ops   >', token, file=sys.stderr, flush=True)
             self.ops[token]()
         elif token in self.defs.keys():
-            print('def   >', token, file=sys.stderr, flush=True)
             self.implement_def(token)
         else:
             return None
-        print(' ' * 15, self.stack, file=sys.stderr, flush=True)
         return None
     
     def implement_def(self, def_name: str):
@@ -115,9 +108,8 @@ class RPN_Calculator:
         while current != None:
             if current.token == 'IF':
                 top = self.pop_nb()
-                #print('top stack>', top, file=sys.stderr, flush=True)
                 if top != None:
-                    current = [current.child_false, current.child_true][top == 1]
+                    current = [current.child_false, current.child_true][top != 0]
                 else:
                     break
             else:
@@ -218,8 +210,8 @@ class ObsoleteProgrammer:
         self.is_in_def = False
 
     def update_with_input(self, instructions: str):
-        """Parse tokens, either implementing instruction
-        or appending it to definition buffer until 'END' instruction comes out.
+        """Parse tokens, either implement instruction
+        or append token to definition buffer until 'END' instruction comes out.
         """
         tokens = instructions.split()
         while len(tokens):
@@ -227,7 +219,6 @@ class ObsoleteProgrammer:
             if token == 'DEF':
                 self.is_in_def = True
             elif token == 'END':
-                #print('def_buffer >', self.def_buffer, file=sys.stderr, flush=True)
                 self.buffer_to_definition()
                 self.is_in_def = False
             else :
@@ -237,14 +228,12 @@ class ObsoleteProgrammer:
                     self.rpn.implement_instruction(token)
 
     def buffer_to_definition(self):
-        """ upon 'END' instruction, empties definition buffer 
+        """ upon 'END' instruction, clears definition buffer 
         into a linked list of instructions"""
         if len(self.def_buffer) > 1:
-            print('buff  >', self.def_buffer, file=sys.stderr, flush=True)
             new_def = Definition(self.def_buffer)
             self.rpn.defs[new_def.name] = new_def
             self.def_buffer.clear()
-        print('defs >', self.rpn.defs, file=sys.stderr, flush=True)
 
 
 def test09b():
@@ -267,7 +256,7 @@ def test09():
 
 
 def main():
-    input_lines = test09b()
+    input_lines = test09()
     obsolete = ObsoleteProgrammer()
     for line in input_lines:
         obsolete.update_with_input(line)
