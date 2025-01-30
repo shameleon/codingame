@@ -8,19 +8,23 @@
 
 ## SOLO PUZZLEs
 
+| Codingame puzzle | language(s) | score | skills |
+| ----------- | -------- | ---- | ---------------------- |
+| [The Resistance](https://www.codingame.com/training/expert/the-resistance)| Python | `10%` |  Recursion, Memoization, Dynamic programming, Divide and conquer  |
+
 ### Difficulty **hard** puzzles
 
 | Codingame puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing)| C++ | `100%` | Permutations |
-| [Surface](https://www.codingame.com/training/hard/surface)| C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
-| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |   Greedy algorithms, Scheduling|
-| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
-| [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
 | [CGX Formatter](https://www.codingame.com/training/hard/cgx-formatter)| Python | `100%` | Regular Expressions, Parsing|
-| [Staircases](https://www.codingame.com/training/hard/staircases)| Python | `100%` | Regular Expressions, Parsing|
-| [Obsolete Programming](https://www.codingame.com/training/hard/obsolete-programming) | Python | `100%` | Parsing, Interpreter |
 | [Don't panic episode 2](https://www.codingame.com/training/hard/don't-panic-episode-2)| Python | `40%` | BFS Pruning A* |
+| [Genome sequencing](https://www.codingame.com/training/hard/genome-sequencing)| C++ | `100%` | Permutations |
+| [Obsolete Programming](https://www.codingame.com/training/hard/obsolete-programming) | Python | `100%` | Parsing, Interpreter |
+| [Roller Coaster](https://www.codingame.com/training/hard/roller-coaster)| Python | `100%` | Dynamic Programming, FIFO queue|
+| [Staircases](https://www.codingame.com/training/hard/staircases)| Python | `100%` | Regular Expressions, Parsing|
+| [Super computer](https://www.codingame.com/training/hard/super-computer) | Python | `100%` |   Greedy algorithms, Scheduling|
+| [Surface](https://www.codingame.com/training/hard/surface)| C++ | `60%` |Flood fill, Memoization, BFS, Recursion|
+| [Vox codei episode 1](https://www.codingame.com/training/hard/vox-codei-episode-1)| Python | `100%` | DFS, Brute-force, Simulation|
 
 ### Difficulty **Medium** puzzles
 | Codingame puzzle | language(s) | score | skills |

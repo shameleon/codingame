@@ -17,11 +17,10 @@ class MorseTranslator:
 
 
 class Resistance:
-    def __init__(self, sequence, n, words):
+    def __init__(self, sequence, words):
         """ """
         self.translate = MorseTranslator()
         self.seq = sequence
-        self.n = n
         mords = [self.translate.morsed(word) for word in words]
         matches = {idx: mord in sequence for idx, mord in enumerate(mords)}
         self.matches = {k: v for k, v in matches.items() if v}
