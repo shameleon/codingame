@@ -1,7 +1,7 @@
 import sys
 import re
 
-""" progress 50% - KO test04, many validators"""
+""" progress 50% - KO test04. 5, 7:10 validators failed"""
 
 class MorseTranslator:
     def __init__(self):
@@ -62,6 +62,7 @@ class Resistance:
         return total_at_index
 
     def number_of_solutions(self):
+        print(len(self.mord_set), "mords", file=sys.stderr, flush=True)
         return self.get_mords_at_index(0)
 
 
