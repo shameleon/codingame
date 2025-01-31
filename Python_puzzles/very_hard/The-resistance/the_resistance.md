@@ -57,3 +57,29 @@ Output
 
 2
 
+
+
+### Some of the best solutions -NOT MYCODE
+
+solution from tutubalin :
+
+```python
+morse = {
+    'A': '.-',  'B': '-...','C': '-.-.','D': '-..', 'E': '.',  'F': '..-.','G': '--.', 'H': '....','I': '..',
+    'J': '.---','K': '-.-', 'L': '.-..','M': '--',  'N': '-.', 'O': '---', 'P': '.--.','Q': '--.-','R': '.-.',
+    'S': '...', 'T': '-',   'U': '..-', 'V': '...-','W': '.--','X': '-..-','Y': '-.--','Z': '--..'}
+
+message = input()
+words = ["".join(morse[letter] for letter in input()) for _ in range(int(input()))]
+    
+counter = [0]*(len(message)+1)
+counter[0]=1
+
+for position, count in enumerate(counter):
+    if count:
+        for word in words:
+            if message.startswith(word, position):
+                counter[position + len(word)] += count
+                
+print(counter[-1])
+```

@@ -8,9 +8,11 @@
 
 ## SOLO PUZZLEs
 
+### Difficulty **very hard** puzzles
+
 | Codingame puzzle | language(s) | score | skills |
 | ----------- | -------- | ---- | ---------------------- |
-| [The Resistance](https://www.codingame.com/training/expert/the-resistance)| Python | `10%` |  Recursion, Memoization, Dynamic programming, Divide and conquer  |
+| [The Resistance](https://www.codingame.com/training/expert/the-resistance)| Python | `100%` |  Recursion, Memoization, Dynamic programming, Divide and conquer |
 
 ### Difficulty **hard** puzzles
 

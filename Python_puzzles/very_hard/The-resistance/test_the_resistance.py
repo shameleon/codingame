@@ -1,7 +1,7 @@
 import sys
 import time
 
-from the_resistance import Resistance, MorseWord, MorseTranslator
+from the_resistance import Resistance, MorseTranslator
 
 
 class TheResistanceTests:
@@ -72,7 +72,7 @@ def main():
         result = resist.number_of_solutions()
         end = time.time()
         print(result)
-        print("Wall time =", end - start)
+        print("Wall time =", round((end - start) * 1000000), "us" , file=sys.stderr, flush=True)
         outcomes.append(['KO', 'OK'][result == answer])
     print(dict(zip(range(len(tests)), outcomes)), file=sys.stderr, flush=True)
 
