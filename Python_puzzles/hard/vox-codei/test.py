@@ -1,5 +1,5 @@
 import sys
-from vox_codei import ForkBomb, VoxCodei
+from vox_codei import VoxCodei
 
 """ width: width of the firewall grid
     height: height of the firewall grid
