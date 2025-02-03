@@ -10,15 +10,7 @@ class Node:
         self.movement = None
 
     def move_type(self, coord):
-        y, x = coord
-        yi, xi = self.timecoords[0]
-        if abs(y - yi) == 1 and x == xi:
-            return ['vertic', x]
-        elif abs(x - xi) == 1 and y == yi:
-            return ['horizo', y]
-        elif y == yi and x == xi:
-            return 'static'
-        return None
+        pass
     
     def __repr__(self):
         return f'Node {self.id} : {self.timecoords[0]}'
@@ -36,35 +28,47 @@ class TimeFrameGraph:
     
     def find_nodes_movements(self):
         """ test with one node """
-        print('---')
-        node = self.surveillance_nodes[5]
-        print(node)
-        print('---')
-        firsts = list()
-        for move in self.time_frame[1]:
-            res = node.move_type(move)
-            if res:
-                print(move, res)
-                firsts.append(move)
-        print('---')
-        for first in firsts:
-            for move in self.time_frame[2]:
-                res2 = self.are_close(first, move)
-                if res2:
-                    print(res2)
-        print('---')
+        for node in self.surveillance_nodes:
+            print('---')
+            coord_0 = node.timecoords[0]
+            print(node)
+            firsts = list()
+            for move in self.time_frame[1]:
+                if self.are_close(coord_0, move):
+                    print(move)
+                    firsts.append(move)
+            for first in firsts:
+                for second in self.time_frame[2]:
+                    res2 = self.are_aligned(coord_0, first, second)
 
-
-    def are_close(self, coord_i, coord):
-        y, x = coord
-        yi, xi = coord_i
-        if abs(y - yi) == 1 and x == xi:
-            return ['vertic', x]
-        elif abs(x - xi) == 1 and y == yi:
-            return ['horizo', y]
-        elif y == yi and x == xi:
-            return 'static'
+    def are_aligned(self, coord_0, coord_1, coord_2):
+        y2, x2 = coord_2
+        y1, x1 = coord_1
+        y0, x0 = coord_0
+        if abs(y1 - y0) == 1 and x1 == x0:
+            if abs(y2 - y1) == 1 and x2 == x1:
+                print(coord_0, ">", coord_1, ">", coord_2)
+                return ['vertic', x0]
+        elif abs(x1 - x0) == 1 and y1 == y0:
+            if abs(x2 - x1) == 1 and y2 == y1:
+                print(coord_0, ">", coord_1, ">", coord_2)
+                return ['horizo', y0]
+        elif y1 == y0 and x1 == x0:
+            if y2 == y1 and x2 == x1:
+                print(coord_0, ">", coord_1, ">", coord_2)
+                return 'static'
         return None
+
+    def are_close(self, coord_0, coord_1):
+        y1, x1 = coord_1
+        y0, x0 = coord_0
+        if abs(y1 - y0) == 1 and x1 == x0:
+            return True
+        elif abs(x1 - x0) == 1 and y1 == y0:
+            return True
+        elif y1 == y0 and x1 == x0:
+            return True
+        return False
 
 
 class VoxCodeiEpisode2:
