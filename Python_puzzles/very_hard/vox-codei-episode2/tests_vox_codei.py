@@ -7,13 +7,30 @@ class Node:
         self.id = node_id
         self.timecoords = list()
         self.timecoords.append(coords)
-        self.movement = None
+        self.move_type = list()
 
-    def move_type(self, coord):
+    def register_blocks(self, blocks_coords: list):
+        if len(self.move_type) != 2:
+            return 
+        move_dir, idx = self.move_type
+        if move_dir in ['horizo', 'vertic']:
+            i = {'horizo': 0, 'vertic': 1}[move_dir]
+            self.blocks = [x for x in blocks_coords if x[i] == idx]
+            print(f'node{self.id} blocks = {self.blocks}', file=sys.stderr, flush=True)
+
+    def update_node_movement(self, move_type, first_move, second_move):
+        self.move_type.extend(move_type)
+        self.timecoords.extend([first_move, second_move])
+
+    def predict_moves(self, turn):
+        """anticipate moves"""
+        if self.move_type == 'horizo':
+            pass
         pass
-    
-    def __repr__(self):
-        return f'Node {self.id} : {self.timecoords[0]}'
+
+    def __repr__(self): 
+        return f'Node {self.id} : {self.timecoords[0]} > {self.timecoords[1]} > {self.timecoords[2]} = {self.move_type}'
+
 
 class TimeFrameGraph:
     def __init__(self):
@@ -26,49 +43,44 @@ class TimeFrameGraph:
                 self.surveillance_nodes.append(Node(i, coords))
         self.time_frame.append(nodes_coords)
     
-    def find_nodes_movements(self):
-        """ test with one node """
+    def find_nodes_movements(self, turn: int):
+        """find node movement in the first 3 turns """
+        if turn != 2:
+            return
         for node in self.surveillance_nodes:
-            print('---')
-            coord_0 = node.timecoords[0]
-            print(node)
-            firsts = list()
-            for move in self.time_frame[1]:
-                if self.are_close(coord_0, move):
-                    print(move)
-                    firsts.append(move)
-            for first in firsts:
-                for second in self.time_frame[2]:
-                    res2 = self.are_aligned(coord_0, first, second)
+            initial_pos = node.timecoords[0]
+            for first_move in self.time_frame[1]:
+                if self.are_close(initial_pos, first_move):
+                    for second_move in self.time_frame[2]:
+                        move_type = self.are_aligned(initial_pos, first_move, second_move)
+                        if move_type != None:
+                            node.update_node_movement(move_type, first_move, second_move)
+                            print(node, file=sys.stderr, flush=True))
 
-    def are_aligned(self, coord_0, coord_1, coord_2):
-        y2, x2 = coord_2
-        y1, x1 = coord_1
-        y0, x0 = coord_0
+    def are_aligned(self, initial_pos, first_move, second_move):
+        """pick coordinates compatible with node linear movement """
+        y0, x0 = initial_pos
+        y1, x1 = first_move
+        y2, x2 = second_move
         if abs(y1 - y0) == 1 and x1 == x0:
             if abs(y2 - y1) == 1 and x2 == x1:
-                print(coord_0, ">", coord_1, ">", coord_2)
                 return ['vertic', x0]
         elif abs(x1 - x0) == 1 and y1 == y0:
             if abs(x2 - x1) == 1 and y2 == y1:
-                print(coord_0, ">", coord_1, ">", coord_2)
                 return ['horizo', y0]
         elif y1 == y0 and x1 == x0:
             if y2 == y1 and x2 == x1:
-                print(coord_0, ">", coord_1, ">", coord_2)
                 return 'static'
         return None
 
-    def are_close(self, coord_0, coord_1):
-        y1, x1 = coord_1
-        y0, x0 = coord_0
-        if abs(y1 - y0) == 1 and x1 == x0:
-            return True
-        elif abs(x1 - x0) == 1 and y1 == y0:
-            return True
-        elif y1 == y0 and x1 == x0:
-            return True
-        return False
+    def are_close(self, initial_pos, first_move):
+        """pick first tuple of coordinates compatible initial position """
+        y0, x0 = initial_pos
+        y1, x1 = first_move
+        along_col = abs(x1 - x0) == 1 and y1 == y0
+        along_row = abs(y1 - y0) == 1 and x1 == x0
+        static_node = y1 == y0 and x1 == x0
+        return along_col or along_row or static_node
 
 
 class VoxCodeiEpisode2:
@@ -77,20 +89,33 @@ class VoxCodeiEpisode2:
         self.h = height
         self.turn = 0
         self.graph = TimeFrameGraph()
+        self.chars = {'nodes': '@', 'blocks': '#'}
     
     def update(self, rounds, map_rows):
         self.record_node_movement(map_rows)
-        if self.turn == 2:
-            self.graph.find_nodes_movements()
+        self.graph.find_nodes_movements(self.turn)
+        self.set_nodes_boundaries(map_rows)
         self.turn += 1
 
     def record_node_movement(self, map_rows):
-        nodes = []
+        nodes_coords = self.get_coordinates_from_map(map_rows, 'nodes')
+        self.graph.add_coords_at_time(nodes_coords)
+
+    def set_nodes_boundaries(self, map_rows):
+        """select blocks that might affect displacment of the surveillance node"""
+        if self.turn != 2:
+            return
+        blocks_coords = self.get_coordinates_from_map(map_rows, 'blocks')
+        for node in self.graph.surveillance_nodes:
+            node.register_blocks(blocks_coords)
+
+    def get_coordinates_from_map(self, map_rows: list, key: str):
+        coords_list = []
         for i, map_row in enumerate(map_rows):
             for j, c in enumerate(map_row):
-                if c == '@':
-                    nodes.append(tuple([i, j]))
-        self.graph.add_coords_at_time(nodes)
+                if c == self.chars[key]:
+                    coords_list.append(tuple([i, j]))
+        return coords_list
 
 
 class Test08:
@@ -147,7 +172,7 @@ def main():
         print(map_rows, file=sys.stderr, flush=True)
         vox.update(rounds, map_rows)
     for line in vox.graph.time_frame:
-        print(line)
+        print(line, file=sys.stderr, flush=True))
 
 
 if __name__ == '__main__':
