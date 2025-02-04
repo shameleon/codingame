@@ -8,6 +8,7 @@ class Node:
         self.timecoords = list()
         self.timecoords.append(coords)
         self.move_type = list()
+        self.predicted_pos = dict()
 
     def register_blocks(self, blocks_coords: list):
         """pick blocks"""
@@ -36,7 +37,7 @@ class Node:
         self.move_type.extend(move_type)
         self.timecoords.extend([first_move, second_move])
 
-    def predict_pos_at_next_turn(self, turn: int) -> tuple:
+    def predict_pos_at_next_turn(self) -> tuple:
         """anticipate next turn move"""
         move_dir, idx = self.move_type
         if move_dir == 'vertic':
@@ -53,13 +54,39 @@ class Node:
             return tuple([idx, x3])
         return self.timecoords[0]
             
+    def plan_next_move(self, t: int):
+        """ next_move based on 2 last moves"""
+        move_dir, idx = self.move_type
+        if move_dir == 'vertic':
+            y1 = self.predicted_pos[t - 2][0]
+            y2 = self.predicted_pos[t - 1][0]
+            y3 = y2 + (y2 - y1)
+            if y3 in self.boundaries:
+                y3 = y1
+            next_move = tuple([y3, idx])
+        elif move_dir == 'horizo':
+            x1 = self.predicted_pos[t - 2][1]
+            x2 = self.predicted_pos[t - 1][1]
+            x3 = x2 + (x2 - x1)
+            if x3 in self.boundaries:
+                x3 = x1
+            next_move = tuple([idx, x3])
+        else:
+            next_move = self.predicted_pos[0]
+        self.predicted_pos[t] = next_move
+        
 
-    def predict_moves(self, turn):
+    def predict_all_next_moves(self, turn, rounds=10):
         """anticipate moves"""
+        t = 0
+        for coord in self.timecoords:
+            self.predicted_pos[t] = coord
+            t += 1
+        while t < rounds:
+            self.plan_next_move(t)
+            t += 1
+        print(f'node{self.id} next moves = {self.predicted_pos}', file=sys.stderr, flush=True)
 
-        if self.move_type == 'horizo':
-            pass
-        pass
 
     def __repr__(self): 
         return f'Node {self.id} : {self.timecoords[0]} > {self.timecoords[1]} > {self.timecoords[2]} = {self.move_type}'
@@ -135,17 +162,19 @@ class VoxCodeiEpisode2:
         self.graph.add_coords_at_time(nodes_coords)
 
     def set_nodes_boundaries(self, map_rows):
-        """select blocks that might affect displacment of the surveillance node"""
+        """third turn only :
+        select blocks that might affect displacment of the surveillance node"""
         if self.turn != 2:
             return
         blocks_coords = self.get_coordinates_from_map(map_rows, 'blocks')
         for node in self.graph.surveillance_nodes:
             node.register_blocks(blocks_coords)
             node.set_boundaries(self.w, self.h)
-        tmp = []
+        #tmp = []
         for node in self.graph.surveillance_nodes:
-            tmp.append(node.predict_pos_at_next_turn(self.turn))
-        print(tmp, file=sys.stderr, flush=True)
+            node.predict_all_next_moves(self.turn)
+            #tmp.append(node.predict_pos_at_next_turn(self.turn))
+        #print(tmp, file=sys.stderr, flush=True)
 
     def get_coordinates_from_map(self, map_rows: list, key: str):
         coords_list = []
