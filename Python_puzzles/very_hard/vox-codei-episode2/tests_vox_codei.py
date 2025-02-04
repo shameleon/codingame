@@ -10,20 +10,53 @@ class Node:
         self.move_type = list()
 
     def register_blocks(self, blocks_coords: list):
+        """pick blocks"""
         if len(self.move_type) != 2:
             return 
         move_dir, idx = self.move_type
         if move_dir in ['horizo', 'vertic']:
             i = {'horizo': 0, 'vertic': 1}[move_dir]
-            self.blocks = [x for x in blocks_coords if x[i] == idx]
-            print(f'node{self.id} blocks = {self.blocks}', file=sys.stderr, flush=True)
+            self.blocks = [p[1 - i] for p in blocks_coords if p[i] == idx]
+
+    def set_boundaries(self, width, height):
+        if self.move_type[0] in ['vertic', 'horizo']:
+            i = {'vertic': 0, 'horizo': 1}[self.move_type[0]]
+            start = -1
+            end = [height, width][i]
+            pos = self.timecoords[0][i]
+            for block_pos in self.blocks:
+                if block_pos < pos:
+                    start = max(start, block_pos)
+                else:
+                    end = min(block_pos, end)
+            self.boundaries = [start, end]
+            print(f'node{self.id} blocks = {self.blocks} limits = {self.boundaries}', file=sys.stderr, flush=True)
 
     def update_node_movement(self, move_type, first_move, second_move):
         self.move_type.extend(move_type)
         self.timecoords.extend([first_move, second_move])
 
+    def predict_pos_at_next_turn(self, turn: int) -> tuple:
+        """anticipate next turn move"""
+        move_dir, idx = self.move_type
+        if move_dir == 'vertic':
+            y1, y2 = [p[0] for p in self.timecoords[-2:]]
+            y3 = y2 + (y2 - y1)
+            if y3 in self.boundaries:
+                y3 = y1
+            return tuple([y3, idx])
+        elif move_dir == 'horizo':
+            x1, x2 = [p[1] for p in self.timecoords[-2:]]
+            x3 = x2 + (x2 - x1)
+            if x3 in self.boundaries:
+                x3 = x1
+            return tuple([idx, x3])
+        return self.timecoords[0]
+            
+
     def predict_moves(self, turn):
         """anticipate moves"""
+
         if self.move_type == 'horizo':
             pass
         pass
@@ -55,7 +88,7 @@ class TimeFrameGraph:
                         move_type = self.are_aligned(initial_pos, first_move, second_move)
                         if move_type != None:
                             node.update_node_movement(move_type, first_move, second_move)
-                            print(node, file=sys.stderr, flush=True))
+                            print(node, file=sys.stderr, flush=True)
 
     def are_aligned(self, initial_pos, first_move, second_move):
         """pick coordinates compatible with node linear movement """
@@ -108,6 +141,11 @@ class VoxCodeiEpisode2:
         blocks_coords = self.get_coordinates_from_map(map_rows, 'blocks')
         for node in self.graph.surveillance_nodes:
             node.register_blocks(blocks_coords)
+            node.set_boundaries(self.w, self.h)
+        tmp = []
+        for node in self.graph.surveillance_nodes:
+            tmp.append(node.predict_pos_at_next_turn(self.turn))
+        print(tmp, file=sys.stderr, flush=True)
 
     def get_coordinates_from_map(self, map_rows: list, key: str):
         coords_list = []
@@ -162,7 +200,7 @@ class Test03:
 
 def main():
     test = Test08()
-    width, height = test.map_dimensions().split()
+    width, height = map(int, test.map_dimensions().split())
     print(width, height, file=sys.stderr, flush=True)
     vox = VoxCodeiEpisode2(width, height)
     for turn in range(4):
@@ -172,7 +210,7 @@ def main():
         print(map_rows, file=sys.stderr, flush=True)
         vox.update(rounds, map_rows)
     for line in vox.graph.time_frame:
-        print(line, file=sys.stderr, flush=True))
+        print(line, file=sys.stderr, flush=True)
 
 
 if __name__ == '__main__':
