@@ -16,11 +16,15 @@ class TestCross:
         for i in range(self.h):
             s = ''
             for j in range(self.w):
-                tile_score = self.check_cross(nodes_pos, tuple([i, j]))
-                s += str(tile_score)
-                if tile_score > score:
-                    max_tile = tuple([i, j])
-                    score = tile_score
+                tup = tuple([i, j])
+                if tup in nodes_pos or tup in self.blocks_coords:
+                    s += str(0)
+                else:
+                    tile_score = self.check_cross(nodes_pos, tup)
+                    s += str(tile_score)
+                    if tile_score > score:
+                        max_tile = tup
+                        score = tile_score
             scores.append(s)
         print("pos", max_tile, "score", score)
         print('\n'.join(scores))
@@ -29,19 +33,23 @@ class TestCross:
 
     def check_cross(self, nodes_pos, tup):
         score = 0
-        if tup in nodes_pos or tup in self.blocks_coords:
-            return score
+        targets = []
         for y, x in nodes_pos:
             if y == tup[0] and abs(tup[1] - x) <= 3:
                 score += 1
+                targets.append(tuple([y, x]))
                 for k in range(min(tup[1], x) + 1, max(tup[1], x)):
                     if tuple([y, k]) in self.blocks_coords:
                         score = 0
             elif x == tup[1] and abs(tup[0] - y) <= 3:
                 score += 1
+                targets.append(tuple([y, x]))
                 for k in range(min(tup[0], y) + 1, max(tup[0], y)):
                     if tuple([k, x]) in self.blocks_coords:
-                        score = 0
+                        score = 0               
+        if tup == (3, 6):
+            print('nodes', nodes_pos)
+            print('bomb targets', targets)
         return score
     
     def print_nodes_on_map(self, nodes_coords):
