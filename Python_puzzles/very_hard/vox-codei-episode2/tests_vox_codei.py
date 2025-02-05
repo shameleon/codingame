@@ -2,6 +2,13 @@ import sys
 
 #from vox_codei_episode2 import VoxCodeiEpisode2
 
+class ForkBomb:
+    def __init__(self, turn_to_explode:int, coords:tuple, node_ids: list):
+        self.coords = coords
+        self.turn_to_place = turn_to_explode - 3
+        self.nodes_ids = node_ids
+        self.placed = False
+
 class Node:
     def __init__(self, node_id, coords: tuple):
         self.id = node_id
@@ -76,7 +83,7 @@ class Node:
         self.predicted_pos[t] = next_move
         
 
-    def predict_all_next_moves(self, turn, rounds=10):
+    def predict_all_next_moves(self, turn, rounds=15):
         """anticipate moves"""
         t = 0
         for coord in self.timecoords:
@@ -92,19 +99,21 @@ class Node:
         return f'Node {self.id} : {self.timecoords[0]} > {self.timecoords[1]} > {self.timecoords[2]} = {self.move_type}'
 
 
-class TimeFrameGraph:
+class EarlyTimeFrameGraph:
+    """caracterize node movement from map datapoints """
     def __init__(self):
         self.surveillance_nodes = list()
         self.time_frame = list()
 
     def add_coords_at_time(self, nodes_coords):
+        """create surveillance nodes instances and loads data for the current timepoint """
         if len(self.time_frame) == 0:
             for i, coords in enumerate(nodes_coords):
                 self.surveillance_nodes.append(Node(i, coords))
         self.time_frame.append(nodes_coords)
     
     def find_nodes_movements(self, turn: int):
-        """find node movement in the first 3 turns """
+        """find node movement from the first 3 turns"""
         if turn != 2:
             return
         for node in self.surveillance_nodes:
@@ -134,7 +143,7 @@ class TimeFrameGraph:
         return None
 
     def are_close(self, initial_pos, first_move):
-        """pick first tuple of coordinates compatible initial position """
+        """detemine if both input tuples are compatible with node movement pattern"""
         y0, x0 = initial_pos
         y1, x1 = first_move
         along_col = abs(x1 - x0) == 1 and y1 == y0
@@ -148,41 +157,68 @@ class VoxCodeiEpisode2:
         self.w = width
         self.h = height
         self.turn = 0
-        self.graph = TimeFrameGraph()
+        self.graph = EarlyTimeFrameGraph()
         self.chars = {'nodes': '@', 'blocks': '#'}
     
     def update(self, rounds, map_rows):
         self.record_node_movement(map_rows)
         self.graph.find_nodes_movements(self.turn)
-        self.set_nodes_boundaries(map_rows)
+        self.predict_nodes_future_positions(map_rows) ## rounds
+        if self.turn == 3:
+            for t in range(8, 12):
+                self.load_prediction_at_turn(t)
+
         self.turn += 1
 
     def record_node_movement(self, map_rows):
         nodes_coords = self.get_coordinates_from_map(map_rows, 'nodes')
         self.graph.add_coords_at_time(nodes_coords)
 
-    def set_nodes_boundaries(self, map_rows):
+    def predict_nodes_future_positions(self, map_rows):
         """third turn only :
-        select blocks that might affect displacment of the surveillance node"""
+        select blocks that might affect displacment of the surveillance node.
+        That info is passed to nodes so that they ca predict their guture moves"""
         if self.turn != 2:
             return
-        blocks_coords = self.get_coordinates_from_map(map_rows, 'blocks')
+        self.blocks_coords = self.get_coordinates_from_map(map_rows, 'blocks')
         for node in self.graph.surveillance_nodes:
-            node.register_blocks(blocks_coords)
+            node.register_blocks(self.blocks_coords)
             node.set_boundaries(self.w, self.h)
-        #tmp = []
-        for node in self.graph.surveillance_nodes:
             node.predict_all_next_moves(self.turn)
-            #tmp.append(node.predict_pos_at_next_turn(self.turn))
-        #print(tmp, file=sys.stderr, flush=True)
 
     def get_coordinates_from_map(self, map_rows: list, key: str):
+        """for a given key char, extract corresponding coordinates on the maps"""
         coords_list = []
         for i, map_row in enumerate(map_rows):
-            for j, c in enumerate(map_row):
-                if c == self.chars[key]:
-                    coords_list.append(tuple([i, j]))
+            coords_list.extend([tuple([i, j]) for j, c in enumerate(map_row) if c == self.chars[key]])
         return coords_list
+    
+    def load_prediction_at_turn(self, future_turn):
+        ft = future_turn
+        if ft < 2:
+            return
+        nodes_pos = [node.predicted_pos[ft] for node in self.graph.surveillance_nodes]
+        self.print_nodes_on_map(nodes_pos)
+        #nodes_pos.append([node.predicted_pos[ft + 1] for node in self.graph.surveillance_nodes])
+        #nodes_pos.append([node.predicted_pos[ft + 2] for node in self.graph.surveillance_nodes])
+        for i in range(self.h):
+            for j in range(self.w):
+                score = self.check_cross(nodes_pos, tuple([i, j]))
+    
+    def check_cross(self, nodes_pos, tup):
+        # for y, x in nodes_pos:
+        #     (node[0] == y and abs(node[1] - x) <= 3):
+        pass
+
+    def print_nodes_on_map(self, nodes_coords: list):
+        char = self.chars['nodes']
+        grid = ['.' * self.w] * self.h
+        for y, x in nodes_coords:
+            grid[y] = grid[y][:x] +  self.chars['nodes'] + grid[y][x + 1:]
+        for y, x in self.blocks_coords:
+            grid[y] = grid[y][:x] +  self.chars['blocks'] + grid[y][x + 1:]
+        print('')
+        print('\n'.join(grid))
 
 
 class Test08:
