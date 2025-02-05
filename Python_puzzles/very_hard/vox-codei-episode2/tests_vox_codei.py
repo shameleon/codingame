@@ -165,7 +165,7 @@ class VoxCodeiEpisode2:
         self.graph.find_nodes_movements(self.turn)
         self.predict_nodes_future_positions(map_rows) ## rounds
         if self.turn == 3:
-            for t in range(8, 12):
+            for t in range(8, 15):
                 self.load_prediction_at_turn(t)
 
         self.turn += 1
@@ -198,17 +198,42 @@ class VoxCodeiEpisode2:
         if ft < 2:
             return
         nodes_pos = [node.predicted_pos[ft] for node in self.graph.surveillance_nodes]
-        self.print_nodes_on_map(nodes_pos)
         #nodes_pos.append([node.predicted_pos[ft + 1] for node in self.graph.surveillance_nodes])
         #nodes_pos.append([node.predicted_pos[ft + 2] for node in self.graph.surveillance_nodes])
+        self.print_nodes_on_map(nodes_pos)
+        score = 0
+        max_tile = None
+        scores = []
         for i in range(self.h):
+            s = ''
             for j in range(self.w):
-                score = self.check_cross(nodes_pos, tuple([i, j]))
+                tile_score = self.check_cross(nodes_pos, tuple([i, j]))
+                s += str(tile_score)
+                if tile_score > score:
+                    max_tile = tuple([i, j])
+                    score = tile_score
+            scores.append(s)
+        print("time=",ft,"pos", max_tile, "score", score)
+        print('\n'.join(scores))
+        print(self.blocks_coords)
+        print(nodes_pos)
     
     def check_cross(self, nodes_pos, tup):
-        # for y, x in nodes_pos:
-        #     (node[0] == y and abs(node[1] - x) <= 3):
-        pass
+        score = 0
+        if tup in nodes_pos or tup in self.blocks_coords:
+            return score
+        for y, x in nodes_pos:
+            if y == tup[0] and abs(tup[1] - x) <= 3:
+                score += 1
+                for k in range(min(tup[1], x) + 1, max(tup[1], x)):
+                    if tuple([y, k]) in self.blocks_coords:
+                        score = 0
+            elif x == tup[1] and abs(tup[0] - y) <= 3:
+                score += 1
+                for k in range(min(tup[0], y) + 1, max(tup[0], y)):
+                    if tuple([k, x]) in self.blocks_coords:
+                        score = 0
+        return score
 
     def print_nodes_on_map(self, nodes_coords: list):
         char = self.chars['nodes']
@@ -217,7 +242,6 @@ class VoxCodeiEpisode2:
             grid[y] = grid[y][:x] +  self.chars['nodes'] + grid[y][x + 1:]
         for y, x in self.blocks_coords:
             grid[y] = grid[y][:x] +  self.chars['blocks'] + grid[y][x + 1:]
-        print('')
         print('\n'.join(grid))
 
 
