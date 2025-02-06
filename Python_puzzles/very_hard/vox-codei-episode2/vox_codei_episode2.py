@@ -270,7 +270,6 @@ def main():
     width, height = [int(i) for i in input().split()]
     print(width, height, file=sys.stderr, flush=True)
     vox = VoxCodeiEpisode2(width, height)
-    solutions = ["3 2", "4 1", "5 2", "6 3", "8 5"] 
     # game loop
     turn = 0
     while True:
