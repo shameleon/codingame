@@ -1,14 +1,48 @@
 import sys
 
+
 class ForkBomb:
-    def __init__(self, turn_to_explode:int, coords:tuple, node_ids: list):
+    def __init__(self, turn_to_explode:int, coords:tuple, node_ids: set):
         self.coords = coords
-        self.turn_to_place = turn_to_explode - 3
+        self.turn_to_place = turn_to_explode - 4
         self.nodes_ids = node_ids
         self.placed = False
 
+    def __repr__(self):
+        return ' '.join(map(str, self.coords[::-1]))
+
+
+class DepthFirstSearch:
+    """search for first solution through instances of forkbombs"""
+    def __init__(self, best_scores: set, nb_nodes:int , nb_bombs:int):
+        self.nb_bombs = nb_bombs
+        self.nb_nodes = nb_nodes
+        self.best_scores = best_scores
+        self.solution_found = False
+        self.search_best_combination([], set(), nb_bombs)
+
+    def search_best_combination(self, comb: list, nodes_to_be_destroyed: set, nb_bombs):
+        if self.solution_found:
+            return
+        if len(nodes_to_be_destroyed) == self.nb_nodes:
+            self.solution_found = True
+            self.winner_comb = comb
+            print("best comb", comb, file=sys.stderr, flush=True)
+            return
+        if nb_bombs == 0:
+            return
+        for bomb in self.best_scores:
+            if bomb.turn_to_place not in comb:
+                new_comb = comb + [bomb.turn_to_place] 
+                new_nodes = nodes_to_be_destroyed | set(bomb.nodes_ids)
+                self.search_best_combination(new_comb, new_nodes, nb_bombs - 1)
+
+    def get_best_bombs(self):
+        return [bomb for bomb in self.best_scores if bomb.turn_to_place in self.winner_comb]
+        
 
 class Node:
+    """surveillance node @ """
     def __init__(self, node_id, coords: tuple):
         self.id = node_id
         self.timecoords = list()
@@ -17,7 +51,7 @@ class Node:
         self.predicted_pos = dict()
 
     def register_blocks(self, blocks_coords: list):
-        """pick blocks"""
+        """pick blocks # that might hinder move along line"""
         if len(self.move_type) != 2:
             return 
         move_dir, idx = self.move_type
@@ -170,17 +204,25 @@ class VoxCodeiEpisode2:
         self.turn = 0
         self.graph = EarlyTimeFrameGraph()
         self.chars = {'nodes': '@', 'blocks': '#'}
+        self.best_scores = []
+        self.forkbombs = []
     
     def update(self, rounds, bombs, map_rows):
         turn_to_predict = 3
+        delay_to_explode = 4
         self.record_node_movement(map_rows)
         self.graph.find_nodes_movements(self.turn)
         self.predict_nodes_future_positions(rounds, map_rows) ## rounds
         if self.turn == turn_to_predict:
-            start = turn_to_predict + 4
+            start = turn_to_predict + delay_to_explode
             stop = turn_to_predict + rounds
             for t in range(start,stop):
                 self.load_prediction_at_turn(t)
+            nb_nodes = len(self.graph.surveillance_nodes)
+            self.dfs = DepthFirstSearch(self.best_scores, nb_nodes, bombs)
+            self.forkbombs = self.dfs.get_best_bombs()
+            print([f'*{x.turn_to_place + 4}:{x.nodes_ids}' for x in self.forkbombs], file=sys.stderr, flush=True)
+        self.drop_bombs()
         self.turn += 1
 
     def record_node_movement(self, map_rows):
@@ -208,23 +250,17 @@ class VoxCodeiEpisode2:
         # self.print_nodes_on_map(nodes_pos)
         score = 0
         max_tile = None
-        scores = []
         for i in range(self.h):
-            s = ''
             for j in range(self.w):
                 tup = tuple([i, j])
                 if tup in nodes_when_placed_pos or tup in self.blocks_coords:
-                    s += '0'
+                    pass
                 else:
                     tile_score = self.check_cross(nodes_pos, tup)
-                    s += str(tile_score)
                     if tile_score > score:
                         max_tile = tup
                         score = tile_score
-            scores.append(s)
         self.create_new_forkbomb(ft, max_tile)
-        # print("time=",ft,"pos", max_tile, "score", score)
-        #print('\n'.join(scores))
     
     def check_cross(self, nodes_pos, tup):
         score = 0
@@ -241,12 +277,20 @@ class VoxCodeiEpisode2:
                         score = 0
         return score
     
-    def create_new_forkbomb(self, ft, max_tile):
-        node_ids = list()
+    def create_new_forkbomb(self, turn_to_explode, max_tile):
+        """Bomb instances are just possibilitid that would be explored by DFS"""
+        node_ids = set()
         for node in self.graph.surveillance_nodes:
-            if self.check_cross([node.predicted_pos[ft]], max_tile) == 1:
-                node_ids.append(node.id)
-        print(ft, max_tile, node_ids)#ForkBomb(ft, max_tile, node_ids)
+            coord = [node.predicted_pos[turn_to_explode]]
+            if self.check_cross(coord, max_tile) == 1:
+                node_ids.add(node.id)
+        self.best_scores.append(ForkBomb(turn_to_explode, max_tile, node_ids))
+
+    def drop_bombs(self):
+        for bomb in self.forkbombs:
+            if bomb.turn_to_place == self.turn:
+                print(f'{bomb.turn_to_place}->*{bomb.nodes_ids}', file=sys.stderr, flush=True)
+                print(bomb)
 
     def get_coordinates_from_map(self, map_rows: list, key: str):
         """for a given key char, extract corresponding coordinates on the maps"""
@@ -256,13 +300,13 @@ class VoxCodeiEpisode2:
         return coords_list
 
     def print_nodes_on_map(self, nodes_coords: list):
-        char = self.chars['nodes']
         grid = ['.' * self.w] * self.h
         for y, x in nodes_coords:
             grid[y] = grid[y][:x] +  self.chars['nodes'] + grid[y][x + 1:]
         for y, x in self.blocks_coords:
             grid[y] = grid[y][:x] +  self.chars['blocks'] + grid[y][x + 1:]
         print('\n'.join(grid))
+
 
 def main():
     # width: width of the firewall grid

@@ -15,25 +15,26 @@ class DFS:
                             14: [2, 3], 15: [0, 1, 2, 5]
                             }
         self.solution_found = False
-        self.bombs = None
-        self.search_best_combination(set(), set(), nb_bombs)
-        
-    def search_best_combination(self, comb: set, nodes_to_be_destroyed: set, nb_bombs):
+        self.winner_bombs = None
+        self.search_best_combination([], set(), nb_bombs)
+        if self.winner_bombs:
+            print("Solution found :", self.winner_bombs)
+        else:
+            print("No Solution was found :(")
+
+    def search_best_combination(self, comb: list, nodes_to_be_destroyed: set, nb_bombs):
         if self.solution_found:
             return
         if len(nodes_to_be_destroyed) == self.nb_nodes:
-            print("Solution found :", comb, nodes_to_be_destroyed)
             self.solution_found = True
-            self.bombs = comb
+            self.winner_bombs = comb
             return
         if nb_bombs == 0:
             return
         for key in range(7, 16, 1):
             if key not in comb:
-                new_comb = set(comb)
-                new_nodes = set(nodes_to_be_destroyed)
-                new_comb.add(key)
-                new_nodes.update(self.best_scores[key])
+                new_comb = comb + [key] 
+                new_nodes = nodes_to_be_destroyed | set(self.best_scores[key])
                 self.search_best_combination(new_comb, new_nodes, nb_bombs - 1)
 
 def main():
