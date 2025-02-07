@@ -4,6 +4,7 @@ from vox_codei_episode2 import VoxCodeiEpisode2
 
 """Tests adapted from codingame.com Puzzle Vox Codei episode 2"""
 
+
 class TestVoxCodei2:
     def __init__(self):
         self.map_dimensions = "12 9"
@@ -68,16 +69,28 @@ class Test05(TestVoxCodei2):
                          3: ['.#....@.....', '..#...@.....', '.......@.#..', '........@.#.', '.......@#...', '......@....#', '.....@...#..', '....@...#...', '...@...#....'],
                          }
 
+class Test01(TestVoxCodei2):
+    """Indestructible nodes, 4 bombs"""
+    def __init__(self):
+        super().__init__()
+        self.a_solution = {}
+        self.rounds_and_bombs = [99, 9]
+        self.map_rows = {0: ['............', '............', '............', '............', '.@..........', '............', '............', '............', '............'],
+                         1: ['............', '............', '............', '............', '..@.........', '............', '............', '............', '............'],
+                         2: ['............', '............', '............', '............', '...@........', '............', '............', '............', '............'],
+                         3: ['............', '............', '............', '............', '....@.......', '............', '............', '............', '............'],
+                         }
 
 def main():
-    test = Test06()
+    test = Test01()
     width, height = map(int, test.get_map_dimensions().split())
     vox = VoxCodeiEpisode2(width, height)
     for turn in range(4):
         rounds_bombs, map_rows = test.get_round_map(turn)
         rounds, bombs = map(int, rounds_bombs.split())
-        vox.update(rounds, bombs, map_rows)
-
+        place_a_bomb = vox.update(rounds, bombs, map_rows)
+        if place_a_bomb:
+            print(place_a_bomb)
 
 if __name__ == '__main__':
     sys.exit(main())

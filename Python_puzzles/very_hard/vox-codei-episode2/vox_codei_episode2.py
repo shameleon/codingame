@@ -176,7 +176,7 @@ class EarlyTimeFrameGraph:
                 return ['horizo', y0]
         elif y1 == y0 and x1 == x0:
             if y2 == y1 and x2 == x1:
-                return 'static'
+                return ['static']
         return None
 
     def are_close(self, initial_pos, first_move):
@@ -218,11 +218,12 @@ class VoxCodeiEpisode2:
             stop = turn_to_predict + rounds
             for t in range(start,stop):
                 self.load_prediction_at_turn(t)
+            print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
             nb_nodes = len(self.graph.surveillance_nodes)
             self.dfs = DepthFirstSearch(self.best_scores, nb_nodes, bombs)
             self.forkbombs = self.dfs.get_best_bombs()
             print([f'*{x.turn_to_place + 4}:{x.nodes_ids}' for x in self.forkbombs], file=sys.stderr, flush=True)
-        self.drop_bombs()
+        self.can_place_a_bomb_at_turn()
         self.turn += 1
 
     def record_node_movement(self, map_rows):
@@ -286,11 +287,12 @@ class VoxCodeiEpisode2:
                 node_ids.add(node.id)
         self.best_scores.append(ForkBomb(turn_to_explode, max_tile, node_ids))
 
-    def drop_bombs(self):
+    def can_place_a_bomb_at_turn(self):
         for bomb in self.forkbombs:
             if bomb.turn_to_place == self.turn:
                 print(f'{bomb.turn_to_place}->*{bomb.nodes_ids}', file=sys.stderr, flush=True)
-                print(bomb)
+                return bomb.__repr__()
+        return None
 
     def get_coordinates_from_map(self, map_rows: list, key: str):
         """for a given key char, extract corresponding coordinates on the maps"""
@@ -325,21 +327,9 @@ def main():
         for i in range(height):
             map_row = input()  # one line of the firewall grid
             map_rows.append(map_row)
-        print(map_rows, file=sys.stderr, flush=True)
-        vox.grid.update(rounds, map_rows)
-        # test 6 53 "6 3"
-        # Patience
-        if rounds == 88:
-            print("5 4")
-        elif rounds == 83:
-            print("10 2")
-        elif rounds == 86:
-            """86    83     moves + 3
-            @.....   ......
-            .@...@   @@*...
-            .....@.  ..@...
-            """
-            print("2 7")
+        place_a_bomb = vox.update(rounds, bombs, map_rows)
+        if place_a_bomb:
+            print(place_a_bomb)
         else:
             print("WAIT")
         turn += 1
