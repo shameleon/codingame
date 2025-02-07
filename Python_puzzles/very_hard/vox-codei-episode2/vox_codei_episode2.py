@@ -1,5 +1,20 @@
 import sys
 
+""" Codinggame Vox Codei episode 5
+
+Tests :
+    Success: 01 02 04 07 08
+    Failed - timeout :  03 05 06
+    Failed - No bombs output :  09
+    Failed - No output :  10
+
+Validators : 40% 
+    same but 08 failed
+
+Todo:
+    Pruning + decision tree
+"""
+
 
 class ForkBomb:
     def __init__(self, turn_to_explode:int, coords:tuple, node_ids: set):
@@ -18,6 +33,7 @@ class DepthFirstSearch:
         self.nb_bombs = nb_bombs
         self.nb_nodes = nb_nodes
         self.best_scores = best_scores
+        self.winner_comb = list()
         self.solution_found = False
         self.search_best_combination([], set(), nb_bombs)
 
@@ -38,8 +54,9 @@ class DepthFirstSearch:
                 self.search_best_combination(new_comb, new_nodes, nb_bombs - 1)
 
     def get_best_bombs(self):
-        return [bomb for bomb in self.best_scores if bomb.turn_to_place in self.winner_comb]
-        
+        if self.winner_comb:
+            return [bomb for bomb in self.best_scores if bomb.turn_to_place in self.winner_comb]
+        return []
 
 class Node:
     """surveillance node @ """
@@ -129,7 +146,7 @@ class EarlyTimeFrameGraph:
             return
         for node in self.surveillance_nodes:
             self.search_moves(node)
-            print(node)
+            # print(node, file=sys.stderr, flush=True)
 
     def search_moves(self, node: Node):
         p0 = node.timecoords[0]
@@ -158,7 +175,7 @@ class EarlyTimeFrameGraph:
                 return ['horizo', y0]
         elif y1 == y0 and x1 == x0:
             if y2 == y1 and x2 == x1:
-                return ['static']
+                return ['static', -1]
         return None
 
     def are_close(self, initial_pos, first_move):
@@ -290,7 +307,7 @@ class VoxCodeiEpisode2:
             grid[y] = grid[y][:x] +  self.chars['nodes'] + grid[y][x + 1:]
         for y, x in self.blocks_coords:
             grid[y] = grid[y][:x] +  self.chars['blocks'] + grid[y][x + 1:]
-        print('\n'.join(grid))
+        print('\n'.join(grid), file=sys.stderr, flush=True)
 
 
 def main():

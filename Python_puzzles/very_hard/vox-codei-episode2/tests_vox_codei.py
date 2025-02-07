@@ -1,4 +1,5 @@
 import sys
+from time import time
 
 from vox_codei_episode2 import VoxCodeiEpisode2
 
@@ -120,15 +121,21 @@ class Test01(TestVoxCodei2):
                          }
 
 def main():
-    test = Test05()
-    width, height = map(int, test.get_map_dimensions().split())
-    vox = VoxCodeiEpisode2(width, height)
-    for turn in range(4):
-        rounds_bombs, map_rows = test.get_round_map(turn)
-        rounds, bombs = map(int, rounds_bombs.split())
-        place_a_bomb = vox.update(rounds, bombs, map_rows)
+    tests = [Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09]
+    for test in tests:
+        current = test()
+        print("-" * 50, type(current).__name__, file=sys.stderr, flush=True)
+        width, height = map(int, current.get_map_dimensions().split())
+        time_start = time()
+        vox = VoxCodeiEpisode2(width, height)
+        for turn in range(4):
+            rounds_bombs, map_rows = current.get_round_map(turn)
+            rounds, bombs = map(int, rounds_bombs.split())
+            place_a_bomb = vox.update(rounds, bombs, map_rows)
         if place_a_bomb:
             print(place_a_bomb)
+        print(round((time() - time_start) * 1000000) / 1000, "ms", file=sys.stderr, flush=True)
+
 
 if __name__ == '__main__':
     sys.exit(main())
