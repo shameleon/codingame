@@ -1,10 +1,11 @@
 import sys
 
+from tests_vox_codei import Test01
 
 class ForkBomb:
     def __init__(self, turn_to_explode:int, coords:tuple, node_ids: set):
         self.coords = coords
-        self.turn_to_place = turn_to_explode - 2  #### weird why not 4
+        self.turn_to_place = turn_to_explode - 4
         self.nodes_ids = node_ids
         self.placed = False
 
@@ -214,9 +215,9 @@ class VoxCodeiEpisode2:
         self.graph.find_nodes_movements(self.turn)
         self.predict_nodes_future_positions(rounds, map_rows) ## rounds
         if self.turn == turn_to_predict:
-            start = 1 + turn_to_predict + delay_to_explode
+            start = turn_to_predict + delay_to_explode
             #stop = turn_to_predict + rounds
-            stop = start + 10
+            stop = start + 5
             for t in range(start,stop):
                 self.load_prediction_at_turn(t)
             print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
@@ -249,19 +250,26 @@ class VoxCodeiEpisode2:
             return
         nodes_pos = self.graph.get_nodes_position_at(ft, False)
         nodes_when_placed_pos = self.graph.get_nodes_position_at(ft, True)
-        # self.print_nodes_on_map(nodes_pos)
+        #print(ft, file=sys.stderr, flush=True)
+        #self.print_nodes_on_map(nodes_pos)
         score = 0
         max_tile = None
+        scores = []
         for i in range(self.h):
+            s = ''
             for j in range(self.w):
                 tup = tuple([i, j])
-                if tup in nodes_when_placed_pos or tup in self.blocks_coords:
-                    pass
+                if tup in nodes_pos or tup in self.blocks_coords:
+                    s += str(0)
                 else:
                     tile_score = self.check_cross(nodes_pos, tup)
+                    s += str(tile_score)
                     if tile_score > score:
                         max_tile = tup
                         score = tile_score
+            scores.append(s)
+        print("pos", max_tile, "score", score)
+        print('\n'.join(scores))
         self.create_new_forkbomb(ft, max_tile)
     
     def check_cross(self, nodes_pos, tup):
@@ -312,28 +320,16 @@ class VoxCodeiEpisode2:
 
 
 def main():
-    # width: width of the firewall grid
-    # height: height of the firewall grid
-    width, height = [int(i) for i in input().split()]
-    print(width, height, file=sys.stderr, flush=True)
+    test = Test01()
+    width, height = map(int, test.get_map_dimensions().split())
     vox = VoxCodeiEpisode2(width, height)
-    # game loop
-    turn = 0
-    while True:
-        # rounds: number of rounds left before the end of the game
-        # bombs: number of bombs left
-        rounds, bombs = [int(i) for i in input().split()]
-        print(rounds, bombs, file=sys.stderr, flush=True)
-        map_rows = []
-        for i in range(height):
-            map_row = input()  # one line of the firewall grid
-            map_rows.append(map_row)
+    for turn in range(4):
+        rounds_bombs, map_rows = test.get_round_map(turn)
+        rounds, bombs = map(int, rounds_bombs.split())
         place_a_bomb = vox.update(rounds, bombs, map_rows)
         if place_a_bomb:
             print(place_a_bomb)
-        else:
-            print("WAIT")
-        turn += 1
+
 
 if __name__ == '__main__':
     sys.exit(main())

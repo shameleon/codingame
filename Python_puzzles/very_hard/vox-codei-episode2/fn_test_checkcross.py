@@ -5,7 +5,8 @@ class TestCross:
     def __init__(self):
         self.w, self.h = (12, 9)
         self.blocks_coords = [(2, 1), (2, 3), (2, 5), (2, 7), (2, 9), (2, 11), (4, 0), (4, 2), (4, 5), (4, 8), (4, 10)]
-        self.nodes_pos = [(0, 6), (1, 1), (0, 6), (3, 3), (6, 4), (5, 11), (6, 6), (5, 1), (8, 8)]
+        #self.nodes_pos = [(0, 6), (1, 1), (0, 6), (3, 3), (6, 4), (5, 11), (6, 6), (5, 1), (8, 8)]
+        self.nodes_pos = [(3, 3)]
 
     def load_prediction_at_turn(self):
         nodes_pos = self.nodes_pos
