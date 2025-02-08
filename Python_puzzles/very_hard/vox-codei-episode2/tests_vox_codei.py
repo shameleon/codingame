@@ -3,7 +3,7 @@ from time import time
 
 from vox_codei_episode2 import VoxCodeiEpisode2
 
-"""Tests adapted from codingame.com Puzzle Vox Codei episode 2"""
+"""Tests are adapted from codingame.com Puzzle Vox Codei episode 2"""
 
 
 class TestVoxCodei2:

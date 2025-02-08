@@ -3,14 +3,15 @@ import sys
 """ Codinggame Vox Codei episode 5
 
 Tests :
-    Success: 01 02 03 04 06 07
-    Failed but succes if start + 10 rounds : 08
-    Failed - no more bombs :  05
-    Failed - Timeout, no solution:  09
-    Failed -  Timeout :  10
+    Success: 70% on tests 01 02 03 04 __ 06 07 08 __ __
+    tests 07 08 OK but combination of bombs is not optimal
+    
+    tests 05 : Faileswasted uselss bombs
 
-Validators : 70% success
-    05 09 10 failed
+    tests 09 and 10 = Failed - Timeout, no solution:  09 and 
+
+Validators : 60% success from 70% last time 07 was success
+    05 07 09 10 failed
 
 Todo:
     Pruning + decision tree
@@ -30,12 +31,13 @@ class ForkBomb:
 
 class DepthFirstSearch:
     """search for first solution through instances of forkbombs"""
-    def __init__(self, best_scores: set, nb_nodes:int , nb_bombs:int):
+    def __init__(self, best_scores: list, nb_nodes:int , nb_bombs:int):
         self.nb_bombs = nb_bombs
         self.nb_nodes = nb_nodes
-        self.best_scores = best_scores
-        self.winner_comb = list()
+        self.sorted_bombs = sorted(best_scores, key=lambda x: -len(x.nodes_ids))
         self.solution_found = False
+        self.winner_bombs = None
+        self.seen_solutions = set()
         self.search_best_combination([], set(), nb_bombs)
 
     def search_best_combination(self, comb: list, nodes_to_be_destroyed: set, nb_bombs):
@@ -48,15 +50,21 @@ class DepthFirstSearch:
             return
         if nb_bombs == 0:
             return
-        for bomb in self.best_scores:
+        state = frozenset(nodes_to_be_destroyed)
+        if state in self.seen_solutions:
+            return
+        self.seen_solutions.add(state)
+        for bomb in self.sorted_bombs:
             if bomb.turn_to_place not in comb:
                 new_comb = comb + [bomb.turn_to_place] 
                 new_nodes = nodes_to_be_destroyed | set(bomb.nodes_ids)
                 self.search_best_combination(new_comb, new_nodes, nb_bombs - 1)
+                if self.solution_found:
+                    return
 
     def get_best_bombs(self):
         if self.winner_comb:
-            return [bomb for bomb in self.best_scores if bomb.turn_to_place in self.winner_comb]
+            return [bomb for bomb in self.sorted_bombs if bomb.turn_to_place in self.winner_comb]
         return []
 
 class Node:
