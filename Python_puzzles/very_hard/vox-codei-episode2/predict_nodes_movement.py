@@ -1,6 +1,6 @@
 import sys
 from time import time
-from tests_vox_codei import Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09
+from tests_vox_codei import Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09, Test10
 
 
 class Node:
@@ -193,7 +193,7 @@ class VoxCodeiNodeMovement:
     
 
 def main():
-    tests = [Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09]
+    tests = [Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09, Test10]
     for test in tests:
         current = test()
         print("-" * 50, type(current).__name__, file=sys.stderr, flush=True)
