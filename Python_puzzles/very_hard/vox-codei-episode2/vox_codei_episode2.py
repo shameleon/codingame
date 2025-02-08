@@ -218,7 +218,8 @@ class VoxCodeiEpisode2:
             stop = turn_to_predict + rounds
             for t in range(start,stop):
                 self.load_prediction_at_turn(t)
-            print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
+            #print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
+            print(', '.join([f'{x.turn_to_place}: {list(x.nodes_ids)}' for x in self.best_scores]), file=sys.stderr, flush=True)
             nb_nodes = len(self.graph.surveillance_nodes)
             self.dfs = DepthFirstSearch(self.best_scores, nb_nodes, bombs)
             self.forkbombs = self.dfs.get_best_bombs()
