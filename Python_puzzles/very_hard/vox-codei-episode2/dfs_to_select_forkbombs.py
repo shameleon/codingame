@@ -1,4 +1,5 @@
 import sys
+from time import time
 
 
 class Node:
@@ -10,9 +11,10 @@ class DFS:
         self.nb_bombs = nb_bombs
         self.nb_nodes = 8
         self.nodes = [Node(node_id) for node_id in range(self.nb_nodes )]
-        self.best_scores = {7: [0, 2], 8: [4], 9:[5, 6], 10: [4, 5], 
-                            11: [1, 6, 7], 12: [6], 13: [0, 1, 6, 7],
-                            14: [2, 3], 15: [0, 1, 2, 5]
+        self.best_scores = {7: [0, 2], 8: [4], 9:[5, 6], 10: [4, 5], 11: [7],
+                            12: [6], 13: [0, 1, 6, 7], 14: [1], 15:[2], 
+                            16:[4, 5], 17:[6], 18:[5], 
+                            24: [2, 3], 25: [0, 1, 2, 5]
                             }
         self.solution_found = False
         self.winner_bombs = None
@@ -38,7 +40,9 @@ class DFS:
                 self.search_best_combination(new_comb, new_nodes, nb_bombs - 1)
 
 def main():
+    time_start = time()
     dfs = DFS(3)
+    print(round((time() - time_start) * 1000000) / 1000, "ms", file=sys.stderr, flush=True)
 
 if __name__ == '__main__':
     sys.exit(main())

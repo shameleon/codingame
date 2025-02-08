@@ -3,13 +3,14 @@ import sys
 """ Codinggame Vox Codei episode 5
 
 Tests :
-    Success: 01 02 04 07 08
-    Failed - timeout :  03 05 06
-    Failed - No bombs output :  09
-    Failed - No output :  10
+    Success: 01 02 03 04 06 07
+    Failed but succes if start + 10 rounds : 08
+    Failed - no more bombs :  05
+    Failed - Timeout, no solution:  09
+    Failed -  Timeout :  10
 
-Validators : 40% 
-    same but 08 failed
+Validators : 70% success
+    05 09 10 failed
 
 Todo:
     Pruning + decision tree
@@ -214,8 +215,7 @@ class VoxCodeiEpisode2:
         self.predict_nodes_future_positions(rounds, map_rows) ## rounds
         if self.turn == turn_to_predict:
             start = 1 + turn_to_predict + delay_to_explode
-            #stop = turn_to_predict + rounds
-            stop = start + 10
+            stop = turn_to_predict + rounds
             for t in range(start,stop):
                 self.load_prediction_at_turn(t)
             print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
