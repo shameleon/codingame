@@ -99,7 +99,7 @@ class Node:
         return f'Node {self.id} : {self.timecoords[0]} > {self.timecoords[1]} > {self.timecoords[2]} = {self.move_type}'
 
 
-class EarlyTimeFrameGraph:
+Eodclass EarlyTimeFrameGraph:
     """caracterize node movement from map datapoints """
     def __init__(self):
         self.surveillance_nodes = list()
@@ -190,10 +190,11 @@ class VoxCodeiNodeMovement:
             stop = turn_to_predict + rounds
             ####
             #for t in range(start,stop):
-            self.load_prediction_at_turn(turn_to_predict)
-            #print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
-            print(', '.join([f'{x.turn_to_place}: {list(x.nodes_ids)}' for x in self.best_scores]), file=sys.stderr, flush=True)
-            nb_nodes = len(self.graph.surveillance_nodes)
+            for t in range(start, start + 2):
+                self.load_prediction_at_turn(t)
+                #print([f'{x.turn_to_place}{x.coords} {x.nodes_ids}' for x in self.best_scores], file=sys.stderr, flush=True)
+                print(', '.join([f'{x.turn_to_place}: {list(x.nodes_ids)}' for x in self.best_scores]), file=sys.stderr, flush=True)
+                nb_nodes = len(self.graph.surveillance_nodes)
             #self.dfs = DepthFirstSearch(self.best_scores, nb_nodes, bombs)
             #self.forkbombs = self.dfs.get_best_bombs()
             #print([f'*{x.turn_to_place + 4}:{x.nodes_ids}' for x in self.forkbombs], file=sys.stderr, flush=True)
@@ -292,7 +293,7 @@ class VoxCodeiNodeMovement:
 
 def main():
     #tests = [Test01, Test02, Test03, Test05, Test06, Test07, Test08, Test09, Test10]
-    tests = [Test01, Test02, Test03, Test05,]
+    tests = [Test09,]
     for test in tests:
         current = test()
         print("-" * 50, type(current).__name__, file=sys.stderr, flush=True)
